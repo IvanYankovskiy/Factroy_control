@@ -14,7 +14,7 @@ create type device_type AS enum(
 CREATE TABLE IF NOT EXISTS device (
     id          INTEGER PRIMARY KEY,
     token       VARCHAR(100) not null,
-    name        VARCHAR(50),
+    name        VARCHAR(50) not null,
     device_type device_type not NULL ,
     description VARCHAR(100)
 );

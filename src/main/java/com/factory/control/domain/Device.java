@@ -27,7 +27,7 @@ public class Device {
     @Column(name = "token", nullable = false)
     private String token;
 
-    @Column(name = "name", length = 50)
+    @Column(name = "name", length = 50, nullable = false)
     private String name;
 
     @Enumerated(EnumType.STRING)
