@@ -24,7 +24,7 @@ public class Device {
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "seq_device")
     private Integer id;
 
-    @Column(name = "token", nullable = false)
+    @Column(name = "token", nullable = false, unique = true)
     private String token;
 
     @Column(name = "name", length = 50, nullable = false)

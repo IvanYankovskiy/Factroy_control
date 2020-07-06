@@ -13,7 +13,7 @@ create type device_type AS enum(
 --precondition-sql-check expectedResult:f SELECT EXISTS (SELECT FROM pg_tables WHERE schemaname = 'public' AND tablename = 'device');
 CREATE TABLE IF NOT EXISTS device (
     id          INTEGER PRIMARY KEY,
-    token       VARCHAR(100) not null,
+    token       VARCHAR(100) unique not null,
     name        VARCHAR(50) not null,
     device_type device_type not NULL ,
     description VARCHAR(100)

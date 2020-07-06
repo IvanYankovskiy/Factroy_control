@@ -22,7 +22,9 @@ public class ExtruderTelemetry {
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "seq_extruder")
     private Integer id;
 
-    @Column(name = "device_id", nullable = false)
+    @Access(AccessType.PROPERTY)
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "device_id", nullable = false)
     private Device deviceId;
 
     @Column(name = "counter", nullable = false)

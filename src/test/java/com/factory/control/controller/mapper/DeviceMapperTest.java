@@ -27,4 +27,21 @@ class DeviceMapperTest {
         assertEquals(DeviceType.EXTRUDER, entity.getDeviceType());
         assertEquals(dto.getDescription(), entity.getDescription());
     }
+
+    @Test
+    void fromEntityToDto() {
+        Device entity = new Device();
+        entity.setToken("token");
+        entity.setName("device 1");
+        entity.setDeviceType(DeviceType.EXTRUDER);
+        entity.setDescription("test description");
+
+        DeviceDTO dto = deviceMapper.fromEntityToDto(entity);
+
+        assertNotNull(dto);
+        assertEquals(entity.getToken(), dto.getToken());
+        assertEquals(entity.getName(), dto.getName());
+        assertEquals(entity.getDeviceType().name(), DeviceType.EXTRUDER.name());
+        assertEquals(entity.getDescription(), dto.getDescription());
+    }
 }

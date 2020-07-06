@@ -17,6 +17,12 @@ public interface DeviceMapper {
     })
     Device fromDtoToEntity(DeviceDTO dto);
 
+    @Mappings({
+            @Mapping(target = "token", source = "entity.token", nullValueCheckStrategy = NullValueCheckStrategy.ALWAYS),
+            @Mapping(target = "name", source = "entity.name", nullValueCheckStrategy = NullValueCheckStrategy.ALWAYS),
+            @Mapping(target = "deviceType", source = "entity.deviceType", nullValueCheckStrategy = NullValueCheckStrategy.ALWAYS),
+            @Mapping(target = "description", source = "entity.description", nullValueCheckStrategy = NullValueCheckStrategy.ALWAYS)
+    })
     DeviceDTO fromEntityToDto(Device entity);
 
 }
