@@ -11,6 +11,6 @@ import java.util.List;
 @Repository
 public interface ExtruderTelemetryReportRepository extends JpaRepository<ExtruderTelemetry, Integer> {
 
-    public List<ExtruderTelemetry> findExtruderTelemetriesByDeviceIdIsAndTimeAfterAndTimeBefore(Device device, OffsetDateTime startDateTime, OffsetDateTime endDateTime);
+    List<ExtruderTelemetry> findExtruderTelemetriesByDeviceIdIsAndTimeAfterAndTimeBeforeOrderByTime(Device device, OffsetDateTime startDateTime, OffsetDateTime endDateTime);
 
 }
