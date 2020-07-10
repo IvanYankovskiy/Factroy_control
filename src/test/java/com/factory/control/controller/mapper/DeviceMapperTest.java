@@ -4,17 +4,35 @@ import com.factory.control.controller.dto.DeviceDTO;
 import com.factory.control.domain.Device;
 import com.factory.control.domain.DeviceType;
 import org.junit.jupiter.api.Test;
-import org.mapstruct.Mapper;
 import org.mapstruct.factory.Mappers;
+import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.ComponentScan;
+import org.springframework.context.annotation.Configuration;
 
-import static org.junit.jupiter.api.Assertions.*;
+import javax.validation.Validation;
+import javax.validation.Validator;
+import javax.validation.ValidatorFactory;
+
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
 
 class DeviceMapperTest {
 
     private DeviceMapper deviceMapper = Mappers.getMapper(DeviceMapper.class);
 
+    @Configuration
+    @ComponentScan(basePackageClasses = DeviceMapperTest.class)
+    public static class MapperWithValidationTestConfig {
+
+        @Bean("defaultValidator")
+        public static Validator defaultValidator() {
+            ValidatorFactory validatorFactory = Validation.buildDefaultValidatorFactory();
+            return validatorFactory.getValidator();
+        }
+    }
+
     @Test
-    void fromDtoToEntity() {
+    void test_fromDtoToEntity_whenCorrectDto_thenCorrectEntity() {
         DeviceDTO dto = new DeviceDTO();
         dto.setName("device 1");
         dto.setDeviceType("EXTRUDER");

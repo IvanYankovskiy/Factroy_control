@@ -1,25 +1,29 @@
 package com.factory.control.controller;
 
 import com.factory.control.controller.dto.DeviceDTO;
-import com.factory.control.service.DeviceService;
+import com.factory.control.service.DeviceServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
+
+import javax.validation.Valid;
 
 @RestController
 public class DeviceController {
 
-    final DeviceService deviceService;
+    final DeviceServiceImpl deviceService;
 
     @Autowired
-    public DeviceController(DeviceService deviceService) {
+    public DeviceController(DeviceServiceImpl deviceService) {
         this.deviceService = deviceService;
     }
 
     @PostMapping("/device")
-    public DeviceDTO createDevice(@RequestBody DeviceDTO deviceDto) {
+    public DeviceDTO createDevice(@Valid @RequestBody DeviceDTO deviceDto) {
         return deviceService.createDevice(deviceDto);
     }
 
+    @PostMapping("/device/{token}")
+    public DeviceDTO updateDevice(@PathVariable("token") String token, @Valid @RequestBody DeviceDTO deviceDto) throws Exception {
+        return deviceService.updateDevice(token, deviceDto);
+    }
 }

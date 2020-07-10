@@ -5,7 +5,7 @@ import lombok.Setter;
 import lombok.experimental.Accessors;
 
 import javax.persistence.*;
-import java.math.BigInteger;
+import java.math.BigDecimal;
 import java.time.OffsetDateTime;
 import java.util.Objects;
 
@@ -31,10 +31,10 @@ public class ExtruderTelemetry {
     private Integer counter;
 
     @Column(name = "density", nullable = false, precision = 0)
-    private BigInteger density;
+    private BigDecimal density;
 
     @Column(name = "diameter", nullable = false, precision = 0)
-    private BigInteger diameter;
+    private BigDecimal diameter;
 
     @Column(name = "time", nullable = false)
     private OffsetDateTime time;
