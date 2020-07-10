@@ -7,6 +7,7 @@ import com.factory.control.repository.DeviceRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
 import java.util.Objects;
 import java.util.UUID;
 
@@ -30,15 +31,28 @@ public class DeviceServiceImpl implements DeviceService {
         return deviceMapper.fromEntityToDto(device);
     }
 
-    public DeviceDTO updateDevice(String token, DeviceDTO deviceDto) throws Exception {
+    public DeviceDTO updateDevice(String token, DeviceDTO deviceDto) {
         Device persisted = deviceRepository.findByToken(token);
         if (Objects.isNull(persisted)) {
-            throw new Exception("There is now device with token " + token);
+            throw new RuntimeException("There is now device with token " + token);
         }
         Device deviceWish = deviceMapper.fromDtoToEntity(deviceDto);
         persisted.setName(deviceWish.getName());
         persisted.setDescription(deviceWish.getDescription());
         deviceRepository.saveAndFlush(persisted);
         return deviceMapper.fromEntityToDto(persisted);
+    }
+
+    public List<DeviceDTO> selectAll() {
+        List<Device> allDevices = deviceRepository.findAll();
+        return deviceMapper.fromEntitiesToDTOs(allDevices);
+    }
+
+    public DeviceDTO selectByToken(String token) {
+        Device device = deviceRepository.findByToken(token);
+        if (Objects.isNull(device)) {
+            throw new RuntimeException("There is now device with token " + token);
+        }
+        return deviceMapper.fromEntityToDto(device);
     }
 }

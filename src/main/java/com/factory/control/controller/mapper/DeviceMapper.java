@@ -8,6 +8,10 @@ import org.mapstruct.Mapping;
 import org.mapstruct.Mappings;
 
 import javax.validation.Validator;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.List;
+import java.util.stream.Collectors;
 
 @Mapper(componentModel = "spring", uses = {Validator.class}, injectionStrategy = InjectionStrategy.CONSTRUCTOR)
 public interface DeviceMapper {
@@ -26,5 +30,15 @@ public interface DeviceMapper {
             @Mapping(target = "description", source = "entity.description")
     })
     DeviceDTO fromEntityToDto(Device entity);
+
+    default List<DeviceDTO> fromEntitiesToDTOs(Collection<Device> entities) {
+        if (entities == null || entities.isEmpty()) {
+            return new ArrayList<>();
+        }
+        return entities
+                .stream()
+                .map(this::fromEntityToDto)
+                .collect(Collectors.toList());
+    }
 
 }
