@@ -1,18 +1,25 @@
 package com.factory.control.controller.dto;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
+import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.Data;
 
 import java.io.Serializable;
+import java.time.OffsetDateTime;
 
 @Data
 public class ExtruderTelemetryReportDTO implements Serializable {
 
-    private Double length;
+    private Double lengthPerformance;
 
-    private Double density;
+    private Double volumetricPerformance;
 
-    private Integer forLastHours;
+    @JsonProperty("startOfPeriod")
+    @JsonFormat(pattern="yyyy-MM-dd'T'HH:mm:ss.SSSXXX")
+    private OffsetDateTime startOfPeriod;
 
-    private Integer forLasMinutes;
+    @JsonProperty("endOfPeriod")
+    @JsonFormat(pattern="yyyy-MM-dd'T'HH:mm:ss.SSSXXX")
+    private OffsetDateTime endOfPeriod;
 
 }

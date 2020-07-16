@@ -2,7 +2,7 @@ package com.factory.control.service;
 
 import com.factory.control.controller.dto.DeviceDTO;
 import com.factory.control.controller.mapper.DeviceMapper;
-import com.factory.control.domain.Device;
+import com.factory.control.domain.entities.Device;
 import com.factory.control.repository.DeviceRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;

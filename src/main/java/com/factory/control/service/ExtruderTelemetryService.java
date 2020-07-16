@@ -2,8 +2,8 @@ package com.factory.control.service;
 
 import com.factory.control.controller.dto.ExtruderTelemetryDTO;
 import com.factory.control.controller.mapper.ExtruderTelemetryMapper;
-import com.factory.control.domain.Device;
-import com.factory.control.domain.ExtruderTelemetry;
+import com.factory.control.domain.entities.Device;
+import com.factory.control.domain.entities.ExtruderTelemetry;
 import com.factory.control.repository.DeviceRepository;
 import com.factory.control.repository.ExtruderRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -31,7 +31,7 @@ public class ExtruderTelemetryService {
     public String saveTelemetry(String token, ExtruderTelemetryDTO telemetryDTO) {
         Device device = deviceRepository.findByToken(token);
         if (Objects.isNull(device)) {
-            new RuntimeException("Device with token " + token + " doesn't exist");
+            new RuntimeException("Device with token \"" + token + "\" doesn't exist");
         }
         ExtruderTelemetry extruderTelemetry = extruderTelemetryMapper.fromDtoToEntity(telemetryDTO);
         extruderTelemetry.setDeviceId(device);

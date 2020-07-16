@@ -1,4 +1,4 @@
-package com.factory.control.domain;
+package com.factory.control.domain.entities;
 
 import com.vladmihalcea.hibernate.type.basic.PostgreSQLEnumType;
 import lombok.Getter;

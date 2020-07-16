@@ -1,7 +1,7 @@
 package com.factory.control.controller.mapper;
 
 import com.factory.control.controller.dto.ExtruderTelemetryDTO;
-import com.factory.control.domain.ExtruderTelemetry;
+import com.factory.control.domain.entities.ExtruderTelemetry;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.mapstruct.factory.Mappers;

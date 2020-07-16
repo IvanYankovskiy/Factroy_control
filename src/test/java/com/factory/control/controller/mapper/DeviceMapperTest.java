@@ -1,8 +1,8 @@
 package com.factory.control.controller.mapper;
 
 import com.factory.control.controller.dto.DeviceDTO;
-import com.factory.control.domain.Device;
-import com.factory.control.domain.DeviceType;
+import com.factory.control.domain.entities.Device;
+import com.factory.control.domain.entities.DeviceType;
 import org.junit.jupiter.api.Test;
 import org.mapstruct.factory.Mappers;
 

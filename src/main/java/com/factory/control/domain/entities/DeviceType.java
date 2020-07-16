@@ -1,4 +1,4 @@
-package com.factory.control.domain;
+package com.factory.control.domain.entities;
 
 public enum DeviceType {
     EXTRUDER,

@@ -1,10 +1,9 @@
 package com.factory.control.dao_tests;
 
 import com.factory.control.configuration.PostgresSharedContainer;
-import com.factory.control.domain.Device;
-import com.factory.control.domain.DeviceType;
-import com.factory.control.domain.ExtruderTelemetry;
-import com.factory.control.repository.DeviceRepository;
+import com.factory.control.domain.entities.Device;
+import com.factory.control.domain.entities.DeviceType;
+import com.factory.control.domain.entities.ExtruderTelemetry;
 import com.factory.control.repository.ExtruderTelemetryReportRepository;
 import org.junit.ClassRule;
 import org.junit.Test;
@@ -37,9 +36,6 @@ public class ExtruderTelemetryReportRepositoryDAOTest {
 
     @Autowired
     private ExtruderTelemetryReportRepository repository;
-
-    @Autowired
-    private DeviceRepository deviceRepository;
 
     @Test
     @Transactional

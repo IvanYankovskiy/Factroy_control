@@ -1,8 +1,7 @@
 package com.factory.control.controller.mapper;
 
 import com.factory.control.controller.dto.DeviceDTO;
-import com.factory.control.domain.Device;
-import org.mapstruct.InjectionStrategy;
+import com.factory.control.domain.entities.Device;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 import org.mapstruct.Mappings;
@@ -13,7 +12,7 @@ import java.util.Collection;
 import java.util.List;
 import java.util.stream.Collectors;
 
-@Mapper(componentModel = "spring", uses = {Validator.class}, injectionStrategy = InjectionStrategy.CONSTRUCTOR)
+@Mapper(componentModel = "spring", uses = {Validator.class})
 public interface DeviceMapper {
 
     @Mappings({
