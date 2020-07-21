@@ -82,9 +82,11 @@ public class ExtruderTelemetryReportService {
             summarizedLength = summarizedLength.add(instantLength);
             summarizedVolume = summarizedVolume.add(instantVolume);
         }
-        BigDecimal collectionSize = BigDecimal.valueOf(telemetry.size());
-        report.setLengthPerformance(summarizedLength.divide(collectionSize, 2, RoundingMode.HALF_UP));
-        report.setVolumetricPerformance(summarizedVolume.divide(collectionSize, 2, RoundingMode.HALF_UP));
+        if (!telemetry.isEmpty()) {
+            BigDecimal collectionSize = BigDecimal.valueOf(telemetry.size());
+            report.setLengthPerformance(summarizedLength.divide(collectionSize, 2, RoundingMode.HALF_UP));
+            report.setVolumetricPerformance(summarizedVolume.divide(collectionSize, 2, RoundingMode.HALF_UP));
+        }
         return report;
     }
 

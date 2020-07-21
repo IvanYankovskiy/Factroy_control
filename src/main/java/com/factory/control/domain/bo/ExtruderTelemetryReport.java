@@ -8,9 +8,9 @@ import java.time.OffsetDateTime;
 @Data
 public class ExtruderTelemetryReport {
 
-    private BigDecimal lengthPerformance;
+    private BigDecimal lengthPerformance = BigDecimal.valueOf(0.0);
 
-    private BigDecimal volumetricPerformance;
+    private BigDecimal volumetricPerformance = BigDecimal.valueOf(0.0);
 
     private OffsetDateTime startOfPeriod;
 
