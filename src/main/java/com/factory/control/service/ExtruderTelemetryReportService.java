@@ -11,7 +11,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.math.BigDecimal;
-import java.math.RoundingMode;
 import java.time.OffsetDateTime;
 import java.util.List;
 import java.util.Objects;
@@ -82,11 +81,8 @@ public class ExtruderTelemetryReportService {
             summarizedLength = summarizedLength.add(instantLength);
             summarizedVolume = summarizedVolume.add(instantVolume);
         }
-        if (!telemetry.isEmpty()) {
-            BigDecimal collectionSize = BigDecimal.valueOf(telemetry.size());
-            report.setLengthPerformance(summarizedLength.divide(collectionSize, 2, RoundingMode.HALF_UP));
-            report.setVolumetricPerformance(summarizedVolume.divide(collectionSize, 2, RoundingMode.HALF_UP));
-        }
+        report.setLengthPerformance(summarizedLength);
+        report.setVolumetricPerformance(summarizedVolume);
         return report;
     }
 
