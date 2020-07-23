@@ -3,6 +3,8 @@
     postgresdb:
       image: postgres:9.6
       container_name: factorydb_dkr
+      volumes:
+        - /var/lib/postgresql/data:/var/lib/postgresql/data
       ports:
         - 5432:5432
       env_file:
