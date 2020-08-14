@@ -23,9 +23,3 @@ CREATE TABLE IF NOT EXISTS device (
 --preconditions onFail:MARK_RAN onError:HALT
 --precondition-sql-check expectedResult:0 select count(*) from information_schema.sequences where sequence_name='device_id_sequence' and sequence_schema='public';
 CREATE SEQUENCE device_id_sequence;
-
---changeset application:4 dbms:postgresql
---preconditions onFail:MARK_RAN onError:HALT
---precondition-sql-check expectedResult:0 select count(*) from information_schema.constraint_column_usage where table_name = 'extruder' and constraint_name='extruder_device_id_fk';
-ALTER TABLE extruder
-    ADD CONSTRAINT extruder_device_id_fk FOREIGN KEY (device_id) REFERENCES device (id);

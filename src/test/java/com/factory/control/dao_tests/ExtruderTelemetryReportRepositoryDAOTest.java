@@ -6,15 +6,17 @@ import com.factory.control.domain.entities.DeviceType;
 import com.factory.control.domain.entities.ExtruderTelemetry;
 import com.factory.control.repository.ExtruderTelemetryReportRepository;
 import org.junit.ClassRule;
-import org.junit.Test;
 import org.junit.jupiter.api.Assertions;
-import org.junit.runner.RunWith;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabase;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.boot.test.autoconfigure.orm.jpa.TestEntityManager;
-import org.springframework.test.context.junit4.SpringRunner;
+import org.springframework.test.context.ActiveProfiles;
+import org.springframework.test.context.ContextConfiguration;
+import org.springframework.test.context.junit.jupiter.SpringExtension;
 import org.testcontainers.containers.PostgreSQLContainer;
+import org.testcontainers.junit.jupiter.Testcontainers;
 import org.testcontainers.shaded.com.google.common.collect.Lists;
 
 import javax.transaction.Transactional;
@@ -23,10 +25,12 @@ import java.time.OffsetDateTime;
 import java.util.List;
 import java.util.UUID;
 
-@RunWith(SpringRunner.class)
+@ActiveProfiles("test")
+@ExtendWith(SpringExtension.class)
 @DataJpaTest
-@AutoConfigureTestDatabase(replace = AutoConfigureTestDatabase.Replace.NONE)
-public class ExtruderTelemetryReportRepositoryDAOTest {
+@ContextConfiguration(initializers = PostgresSharedContainer.Initializer.class)
+@Testcontainers
+class ExtruderTelemetryReportRepositoryDAOTest {
 
     @ClassRule
     public static PostgreSQLContainer postgreSQLContainer = PostgresSharedContainer.getInstance();
@@ -39,7 +43,7 @@ public class ExtruderTelemetryReportRepositoryDAOTest {
 
     @Test
     @Transactional
-    public void test_selectByDeviceAndTimeBeforeAndTimeAfter() {
+    void test_selectByDeviceAndTimeBeforeAndTimeAfter() {
         Device device = createDevice();
 
         OffsetDateTime now = OffsetDateTime.now();

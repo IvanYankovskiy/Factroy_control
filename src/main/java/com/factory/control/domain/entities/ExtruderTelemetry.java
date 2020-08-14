@@ -13,12 +13,12 @@ import java.util.Objects;
 @Getter
 @Setter
 @Accessors(chain = true)
-@Table(name = "extruder")
+@Table(name = "extruder_telemetry")
 public class ExtruderTelemetry {
 
     @Id
     @Column(name = "id", nullable = false)
-    @SequenceGenerator(name = "seq_extruder", sequenceName = "extruder_id_sequence", allocationSize = 1)
+    @SequenceGenerator(name = "seq_extruder", sequenceName = "extruder_tm_id_sequence", allocationSize = 1)
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "seq_extruder")
     private Integer id;
 

@@ -1,6 +1,12 @@
 package com.factory.control.configuration;
 
+import org.springframework.boot.test.util.TestPropertyValues;
+import org.springframework.context.ApplicationContextInitializer;
+import org.springframework.context.ConfigurableApplicationContext;
 import org.testcontainers.containers.PostgreSQLContainer;
+import org.testcontainers.containers.wait.strategy.Wait;
+
+import java.time.Duration;
 
 public class PostgresSharedContainer extends PostgreSQLContainer<PostgresSharedContainer> {
 
@@ -19,12 +25,22 @@ public class PostgresSharedContainer extends PostgreSQLContainer<PostgresSharedC
         return container;
     }
 
+    public static class Initializer
+            implements ApplicationContextInitializer<ConfigurableApplicationContext> {
+        public void initialize(ConfigurableApplicationContext configurableApplicationContext) {
+            container.start();
+            TestPropertyValues.of(
+                    "spring.datasource.url=" + container.getJdbcUrl(),
+                    "spring.datasource.username=" + container.getUsername(),
+                    "spring.datasource.password=" + container.getPassword()
+            ).applyTo(configurableApplicationContext.getEnvironment());
+            container.waitingFor(Wait.forListeningPort().withStartupTimeout(Duration.ofSeconds(10)));
+        }
+    }
+
     @Override
     public void start() {
         super.start();
-        System.setProperty("FACTORY_DATABASE_URL", container.getJdbcUrl());
-        System.setProperty("FACTORY_DATABASE_USERNAME", container.getUsername());
-        System.setProperty("FACTORY_DATABASE_PASSWORD", container.getPassword());
     }
 
     @Override
