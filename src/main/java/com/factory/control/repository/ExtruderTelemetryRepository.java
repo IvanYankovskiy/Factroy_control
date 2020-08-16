@@ -5,6 +5,6 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
 @Repository
-public interface ExtruderRepository extends JpaRepository<ExtruderTelemetry, Integer> {
+public interface ExtruderTelemetryRepository extends JpaRepository<ExtruderTelemetry, Integer> {
 
 }

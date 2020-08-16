@@ -2,8 +2,9 @@ package com.factory.control.service;
 
 import com.factory.control.controller.dto.DeviceDTO;
 import com.factory.control.controller.mapper.DeviceMapper;
-import com.factory.control.domain.entities.Device;
-import com.factory.control.repository.DeviceRepository;
+import com.factory.control.domain.entities.device.Device;
+import com.factory.control.repository.device.DeviceRepository;
+import com.factory.control.service.exception.DeviceIsNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -34,7 +35,7 @@ public class DeviceServiceImpl implements DeviceService {
     public DeviceDTO updateDevice(String token, DeviceDTO deviceDto) {
         Device persisted = deviceRepository.findByToken(token);
         if (Objects.isNull(persisted)) {
-            throw new RuntimeException("There is now device with token " + token);
+            throw new DeviceIsNotFoundException(token);
         }
         Device deviceWish = deviceMapper.fromDtoToEntity(deviceDto);
         persisted.setName(deviceWish.getName());
@@ -51,7 +52,7 @@ public class DeviceServiceImpl implements DeviceService {
     public DeviceDTO selectByToken(String token) {
         Device device = deviceRepository.findByToken(token);
         if (Objects.isNull(device)) {
-            throw new RuntimeException("There is now device with token " + token);
+            throw new DeviceIsNotFoundException(token);
         }
         return deviceMapper.fromEntityToDto(device);
     }

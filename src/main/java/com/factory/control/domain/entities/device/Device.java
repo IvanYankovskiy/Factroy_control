@@ -1,4 +1,4 @@
-package com.factory.control.domain.entities;
+package com.factory.control.domain.entities.device;
 
 import com.vladmihalcea.hibernate.type.basic.PostgreSQLEnumType;
 import lombok.Getter;
@@ -13,7 +13,10 @@ import javax.persistence.*;
 @Getter
 @Setter
 @Accessors(chain = true)
-@Table(name = "device", schema = "public", catalog = "factory")
+@Table(name = "device")
+@Inheritance(
+        strategy = InheritanceType.JOINED
+)
 @TypeDef(name = "pgsql_enum",
          typeClass = PostgreSQLEnumType.class)
 public class Device {

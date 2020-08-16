@@ -1,6 +1,6 @@
-package com.factory.control.repository;
+package com.factory.control.repository.device;
 
-import com.factory.control.domain.entities.Device;
+import com.factory.control.domain.entities.device.Device;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 

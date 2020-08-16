@@ -3,10 +3,11 @@ package com.factory.control.service;
 import com.factory.control.controller.dto.ExtruderTelemetryReportDTO;
 import com.factory.control.controller.mapper.ExtruderTelemetryReportMapper;
 import com.factory.control.domain.bo.ExtruderTelemetryReport;
-import com.factory.control.domain.entities.Device;
 import com.factory.control.domain.entities.ExtruderTelemetry;
-import com.factory.control.repository.DeviceRepository;
+import com.factory.control.domain.entities.device.Device;
 import com.factory.control.repository.ExtruderTelemetryReportRepository;
+import com.factory.control.repository.device.DeviceRepository;
+import com.factory.control.service.exception.DeviceIsNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -59,7 +60,7 @@ public class ExtruderTelemetryReportService {
     public ExtruderTelemetryReportDTO getTelemetryReportByPeriod(String token, OffsetDateTime startOfPeriod, OffsetDateTime endOfPeriod) {
         Device device = deviceRepository.findByToken(token);
         if (Objects.isNull(device)) {
-            throw new RuntimeException("Device with token " + token + " not found");
+            throw new DeviceIsNotFoundException(token);
         }
         List<ExtruderTelemetry> telemetryList = repository
                 .findExtruderTelemetriesByDeviceIdIsAndTimeAfterAndTimeBeforeOrderByTime(device, startOfPeriod, endOfPeriod);

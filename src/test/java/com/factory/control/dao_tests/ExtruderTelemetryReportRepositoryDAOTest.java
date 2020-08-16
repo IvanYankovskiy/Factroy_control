@@ -1,32 +1,28 @@
 package com.factory.control.dao_tests;
 
 import com.factory.control.configuration.PostgresSharedContainer;
-import com.factory.control.domain.entities.Device;
-import com.factory.control.domain.entities.DeviceType;
 import com.factory.control.domain.entities.ExtruderTelemetry;
+import com.factory.control.domain.entities.device.Device;
+import com.factory.control.domain.entities.device.DeviceType;
 import com.factory.control.repository.ExtruderTelemetryReportRepository;
 import org.junit.ClassRule;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.boot.test.autoconfigure.orm.jpa.TestEntityManager;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.ContextConfiguration;
-import org.springframework.test.context.junit.jupiter.SpringExtension;
 import org.testcontainers.containers.PostgreSQLContainer;
 import org.testcontainers.junit.jupiter.Testcontainers;
 import org.testcontainers.shaded.com.google.common.collect.Lists;
 
-import javax.transaction.Transactional;
 import java.math.BigDecimal;
 import java.time.OffsetDateTime;
 import java.util.List;
 import java.util.UUID;
 
 @ActiveProfiles("test")
-@ExtendWith(SpringExtension.class)
 @DataJpaTest
 @ContextConfiguration(initializers = PostgresSharedContainer.Initializer.class)
 @Testcontainers
@@ -42,7 +38,6 @@ class ExtruderTelemetryReportRepositoryDAOTest {
     private ExtruderTelemetryReportRepository repository;
 
     @Test
-    @Transactional
     void test_selectByDeviceAndTimeBeforeAndTimeAfter() {
         Device device = createDevice();
 
