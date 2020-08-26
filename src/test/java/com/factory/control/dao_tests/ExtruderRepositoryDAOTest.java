@@ -6,11 +6,12 @@ import com.factory.control.domain.entities.device.Extruder;
 import com.factory.control.repository.device.ExtruderRepository;
 import org.junit.ClassRule;
 import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabase;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.boot.test.autoconfigure.orm.jpa.TestEntityManager;
-import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.ContextConfiguration;
 import org.testcontainers.containers.PostgreSQLContainer;
 import org.testcontainers.junit.jupiter.Testcontainers;
@@ -19,10 +20,11 @@ import java.math.BigDecimal;
 import java.util.Optional;
 import java.util.UUID;
 
-@ActiveProfiles("test")
 @DataJpaTest
 @ContextConfiguration(initializers = PostgresSharedContainer.Initializer.class)
+@AutoConfigureTestDatabase(replace = AutoConfigureTestDatabase.Replace.NONE)
 @Testcontainers
+@DisplayName("ExtruderRepository DAO test")
 class ExtruderRepositoryDAOTest {
 
     @ClassRule

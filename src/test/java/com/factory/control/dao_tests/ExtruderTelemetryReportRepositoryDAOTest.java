@@ -7,11 +7,12 @@ import com.factory.control.domain.entities.device.DeviceType;
 import com.factory.control.repository.ExtruderTelemetryReportRepository;
 import org.junit.ClassRule;
 import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabase;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.boot.test.autoconfigure.orm.jpa.TestEntityManager;
-import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.ContextConfiguration;
 import org.testcontainers.containers.PostgreSQLContainer;
 import org.testcontainers.junit.jupiter.Testcontainers;
@@ -22,10 +23,11 @@ import java.time.OffsetDateTime;
 import java.util.List;
 import java.util.UUID;
 
-@ActiveProfiles("test")
 @DataJpaTest
 @ContextConfiguration(initializers = PostgresSharedContainer.Initializer.class)
+@AutoConfigureTestDatabase(replace = AutoConfigureTestDatabase.Replace.NONE)
 @Testcontainers
+@DisplayName("ExtruderTelemetryReportRepository DAO test")
 class ExtruderTelemetryReportRepositoryDAOTest {
 
     @ClassRule
