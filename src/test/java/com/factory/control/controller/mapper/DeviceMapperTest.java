@@ -33,6 +33,18 @@ class DeviceMapperTest {
     }
 
     @Test
+    void test_fromDtoToEntity_whenNonExistentType_thenIllegalArgumentException() {
+        DeviceDTO dto = new DeviceDTO();
+        dto.setName("device 1");
+        dto.setDeviceType("NO_SUCH_TYPE");
+        dto.setDescription("test description");
+
+        assertThrows(IllegalArgumentException.class, () -> {
+            deviceMapper.fromDtoToEntity(dto);
+        });
+    }
+
+    @Test
     void test_fromEntityToDto_whenCorrectEntity_thenCorrectDto() {
         Device entity = new Device();
         entity.setToken("token");
