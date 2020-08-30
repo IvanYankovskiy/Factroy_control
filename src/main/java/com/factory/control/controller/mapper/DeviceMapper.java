@@ -4,6 +4,7 @@ import com.factory.control.controller.dto.DeviceDTO;
 import com.factory.control.domain.entities.device.Device;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
+import org.mapstruct.ReportingPolicy;
 
 import javax.validation.Validator;
 import java.util.ArrayList;
@@ -11,7 +12,7 @@ import java.util.Collection;
 import java.util.List;
 import java.util.stream.Collectors;
 
-@Mapper(componentModel = "spring", uses = {Validator.class})
+@Mapper(componentModel = "spring", uses = {Validator.class}, unmappedTargetPolicy = ReportingPolicy.IGNORE)
 public interface DeviceMapper {
 
 
