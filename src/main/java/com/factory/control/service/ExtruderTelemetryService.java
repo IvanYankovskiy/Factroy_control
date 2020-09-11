@@ -5,7 +5,7 @@ import com.factory.control.controller.mapper.ExtruderTelemetryMapper;
 import com.factory.control.domain.entities.ExtruderTelemetry;
 import com.factory.control.domain.entities.device.Device;
 import com.factory.control.repository.ExtruderTelemetryRepository;
-import com.factory.control.repository.device.DeviceRepository;
+import com.factory.control.repository.device.DeviceBaseRepository;
 import com.factory.control.service.exception.DeviceIsNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -20,10 +20,10 @@ public class ExtruderTelemetryService {
 
     private ExtruderTelemetryRepository repository;
 
-    private DeviceRepository deviceRepository;
+    private DeviceBaseRepository deviceRepository;
 
     @Autowired
-    public ExtruderTelemetryService(ExtruderTelemetryMapper extruderTelemetryMapper, ExtruderTelemetryRepository repository, DeviceRepository deviceRepository) {
+    public ExtruderTelemetryService(ExtruderTelemetryMapper extruderTelemetryMapper, ExtruderTelemetryRepository repository, DeviceBaseRepository deviceRepository) {
         this.repository = repository;
         this.extruderTelemetryMapper = extruderTelemetryMapper;
         this.deviceRepository = deviceRepository;

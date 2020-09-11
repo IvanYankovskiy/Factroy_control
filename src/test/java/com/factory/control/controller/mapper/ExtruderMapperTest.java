@@ -1,5 +1,6 @@
 package com.factory.control.controller.mapper;
 
+import com.factory.control.controller.dto.DeviceDTO;
 import com.factory.control.controller.dto.ExtruderDTO;
 import com.factory.control.domain.entities.device.DeviceType;
 import com.factory.control.domain.entities.device.Extruder;
@@ -93,7 +94,7 @@ class ExtruderMapperTest {
         expectedDtos.add(expectedDto2);
 
         //when
-        List<ExtruderDTO> listOfDto = extruderMapper.fromEntitiesToDTOs(entities);
+        List<? super DeviceDTO> listOfDto = extruderMapper.fromEntitiesToDTOs(entities);
 
         //then
         assertNotNull(listOfDto);
