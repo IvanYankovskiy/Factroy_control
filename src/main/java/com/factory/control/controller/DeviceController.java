@@ -6,7 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
-import java.util.HashMap;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
@@ -14,7 +14,7 @@ import java.util.stream.Collectors;
 @RestController
 public class DeviceController {
 
-    private Map<String, DeviceManagementService> servicesMap = new HashMap<>();
+    private Map<String, DeviceManagementService> servicesMap;
 
     @Autowired
     public DeviceController(List<DeviceManagementService> deviceService) {
@@ -22,8 +22,17 @@ public class DeviceController {
                 .collect(Collectors.toMap(DeviceManagementService::getDeviceType, deviceManagementService -> deviceManagementService));
     }
 
+    @GetMapping("/device")
+    public List<DeviceDTO> selectAllDevices() {
+        List<DeviceDTO> allDevices = new ArrayList<>();
+        servicesMap.values().stream()
+                .map(DeviceManagementService::selectAll)
+                .map(allDevices::addAll);
+        return allDevices;
+    }
+
     @GetMapping("/device/{type}")
-    public List<DeviceDTO> selectAllDevices(@PathVariable("type") String type) {
+    public List<DeviceDTO> selectAllDevicesByType(@PathVariable("type") String type) {
         DeviceManagementService deviceManagementService = getDeviceManagementService(type);
         return deviceManagementService.selectAll();
     }
@@ -42,14 +51,14 @@ public class DeviceController {
         return deviceManagementService.createDevice(deviceDto);
     }
 
-    @PostMapping("/device//{type}/{token}")
+    @PostMapping("/device/{type}/{token}")
     public DeviceDTO updateDevice(@PathVariable("type") String type,
                                   @PathVariable("token") String token, @Valid @RequestBody DeviceDTO deviceDto) {
         DeviceManagementService deviceManagementService = getDeviceManagementService(type);
         return deviceManagementService.updateDevice(token, deviceDto);
     }
 
-    private DeviceManagementService getDeviceManagementService(@PathVariable("type") String type) {
+    private DeviceManagementService getDeviceManagementService(String type) {
         DeviceManagementService deviceManagementService = servicesMap.get(type);
         if (deviceManagementService == null)
             throw new RuntimeException("no such type");

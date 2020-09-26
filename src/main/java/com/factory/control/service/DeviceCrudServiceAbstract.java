@@ -37,6 +37,8 @@ public abstract class DeviceCrudServiceAbstract<E extends Device, ID extends Ser
         return getRepository().save(existedDevice);
     }
 
+    abstract String getType();
+
     protected void beforeCreate(E newDevice) {
         newDevice.setToken(UUID.randomUUID().toString());
     }

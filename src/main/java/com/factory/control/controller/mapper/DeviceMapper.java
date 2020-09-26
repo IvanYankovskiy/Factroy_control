@@ -2,9 +2,7 @@ package com.factory.control.controller.mapper;
 
 import com.factory.control.controller.dto.DeviceDTO;
 import com.factory.control.domain.entities.device.Device;
-import org.mapstruct.Mapper;
-import org.mapstruct.Mapping;
-import org.mapstruct.ReportingPolicy;
+import org.mapstruct.*;
 
 import javax.validation.Validator;
 import java.util.ArrayList;
@@ -12,8 +10,9 @@ import java.util.Collection;
 import java.util.List;
 import java.util.stream.Collectors;
 
-@Mapper(componentModel = "spring", uses = {Validator.class}, unmappedTargetPolicy = ReportingPolicy.IGNORE)
-public interface DeviceMapper {
+@Mapper(componentModel = "spring", uses = {Validator.class}, unmappedTargetPolicy = ReportingPolicy.IGNORE,
+        injectionStrategy = InjectionStrategy.CONSTRUCTOR)
+public interface DeviceMapper extends DeviceManagementMapper<DeviceDTO, Device> {
 
 
     @Mapping(target = "name", source = "dto.name")
@@ -36,5 +35,4 @@ public interface DeviceMapper {
                 .map(this::fromEntityToDto)
                 .collect(Collectors.toList());
     }
-
 }

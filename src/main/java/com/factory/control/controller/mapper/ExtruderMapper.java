@@ -11,7 +11,7 @@ import java.util.stream.Collectors;
 
 @Mapper(config = DeviceMapper.class, mappingInheritanceStrategy = MappingInheritanceStrategy.AUTO_INHERIT_ALL_FROM_CONFIG,
         unmappedTargetPolicy = ReportingPolicy.IGNORE, componentModel = "spring", injectionStrategy = InjectionStrategy.CONSTRUCTOR)
-public interface ExtruderMapper {
+public interface ExtruderMapper extends DeviceManagementMapper<ExtruderDTO, Extruder> {
 
     @Mapping(target = "circumference", source = "dto.circumference")
     Extruder fromDtoToEntity(ExtruderDTO dto);
