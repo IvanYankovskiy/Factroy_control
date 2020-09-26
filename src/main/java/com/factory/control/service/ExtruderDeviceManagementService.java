@@ -1,6 +1,5 @@
 package com.factory.control.service;
 
-import com.factory.control.controller.dto.DeviceDTO;
 import com.factory.control.controller.dto.ExtruderDTO;
 import com.factory.control.controller.mapper.ExtruderMapper;
 import com.factory.control.domain.entities.device.DeviceType;
@@ -13,7 +12,7 @@ import java.util.List;
 import java.util.Optional;
 
 @Service
-public class ExtruderDeviceManagementService implements DeviceManagementService {
+public class ExtruderDeviceManagementService implements DeviceManagementService<ExtruderDTO> {
 
     private final DeviceCrudServiceAbstract<Extruder, Integer> crudService;
 
@@ -27,25 +26,25 @@ public class ExtruderDeviceManagementService implements DeviceManagementService 
     }
 
     @Override
-    public DeviceDTO createDevice(DeviceDTO newDeviceDto) {
-        Extruder device = extruderMapper.fromDtoToEntity((ExtruderDTO) newDeviceDto);
+    public ExtruderDTO createDevice(ExtruderDTO newDeviceDto) {
+        Extruder device = extruderMapper.fromDtoToEntity(newDeviceDto);
         crudService.create(device);
         return extruderMapper.fromEntityToDto(device);
     }
 
     @Override
-    public DeviceDTO updateDevice(String token, DeviceDTO deviceDto) {
+    public ExtruderDTO updateDevice(String token, ExtruderDTO deviceDto) {
         Extruder persisted = Optional.of(crudService.selectByToken(token))
                 .orElseThrow(() -> new DeviceIsNotFoundException(token));
-        Extruder deviceWish = extruderMapper.fromDtoToEntity((ExtruderDTO) deviceDto);
+        Extruder deviceWish = extruderMapper.fromDtoToEntity(deviceDto);
         crudService.update(persisted, deviceWish);
         return extruderMapper.fromEntityToDto(persisted);
     }
 
     @Override
-    public List<DeviceDTO> selectAll() {
+    public List<ExtruderDTO> selectAll() {
         List<Extruder> allDevices = crudService.selectAll();
-        return (List<DeviceDTO>) extruderMapper.fromEntitiesToDTOs(allDevices);
+        return extruderMapper.fromEntitiesToDTOs(allDevices);
     }
 
     @Override

@@ -12,9 +12,9 @@ import java.util.Map;
 import java.util.stream.Collectors;
 
 @RestController
-public class DeviceController {
+public class DeviceController<T extends DeviceDTO> {
 
-    private Map<String, DeviceManagementService> servicesMap;
+    private Map<String, DeviceManagementService<T>> servicesMap;
 
     @Autowired
     public DeviceController(List<DeviceManagementService> deviceService) {
@@ -23,43 +23,43 @@ public class DeviceController {
     }
 
     @GetMapping("/device")
-    public List<DeviceDTO> selectAllDevices() {
-        List<DeviceDTO> allDevices = new ArrayList<>();
-        servicesMap.values().stream()
-                .map(DeviceManagementService::selectAll)
-                .map(allDevices::addAll);
+    public List<T> selectAllDevices() {
+        List<T> allDevices = new ArrayList<>();
+        servicesMap.values().forEach(s -> {
+            allDevices.addAll(s.selectAll());
+        });
         return allDevices;
     }
 
     @GetMapping("/device/{type}")
-    public List<DeviceDTO> selectAllDevicesByType(@PathVariable("type") String type) {
-        DeviceManagementService deviceManagementService = getDeviceManagementService(type);
+    public List<T> selectAllDevicesByType(@PathVariable("type") String type) {
+        DeviceManagementService<T> deviceManagementService = getDeviceManagementService(type);
         return deviceManagementService.selectAll();
     }
 
     @GetMapping("/device/{type}/{token}")
-    public DeviceDTO selectByToken(@PathVariable("type") String type,
+    public T selectByToken(@PathVariable("type") String type,
                                    @PathVariable("token") String token) {
-        DeviceManagementService deviceManagementService = getDeviceManagementService(type);
+        DeviceManagementService<T> deviceManagementService = getDeviceManagementService(type);
         return deviceManagementService.selectByToken(token);
     }
 
     @PostMapping("/device/{type}")
-    public DeviceDTO createDevice(@PathVariable("type") String type,
-                                  @Valid @RequestBody DeviceDTO deviceDto) {
-        DeviceManagementService deviceManagementService = getDeviceManagementService(type);
+    public T createDevice(@PathVariable("type") String type,
+                                  @Valid @RequestBody T deviceDto) {
+        DeviceManagementService<T> deviceManagementService = getDeviceManagementService(type);
         return deviceManagementService.createDevice(deviceDto);
     }
 
     @PostMapping("/device/{type}/{token}")
-    public DeviceDTO updateDevice(@PathVariable("type") String type,
-                                  @PathVariable("token") String token, @Valid @RequestBody DeviceDTO deviceDto) {
-        DeviceManagementService deviceManagementService = getDeviceManagementService(type);
+    public T updateDevice(@PathVariable("type") String type,
+                                  @PathVariable("token") String token, @Valid @RequestBody T deviceDto) {
+        DeviceManagementService<T> deviceManagementService = getDeviceManagementService(type);
         return deviceManagementService.updateDevice(token, deviceDto);
     }
 
-    private DeviceManagementService getDeviceManagementService(String type) {
-        DeviceManagementService deviceManagementService = servicesMap.get(type);
+    private DeviceManagementService<T> getDeviceManagementService(String type) {
+        DeviceManagementService<T> deviceManagementService = servicesMap.get(type);
         if (deviceManagementService == null)
             throw new RuntimeException("no such type");
         return deviceManagementService;

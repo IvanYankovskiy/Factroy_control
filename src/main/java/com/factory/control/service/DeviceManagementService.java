@@ -4,15 +4,15 @@ import com.factory.control.controller.dto.DeviceDTO;
 
 import java.util.List;
 
-public interface DeviceManagementService {
+public interface DeviceManagementService<T extends DeviceDTO> {
 
-    DeviceDTO createDevice(DeviceDTO newDeviceDto);
+    T createDevice(T newDeviceDto);
 
-    DeviceDTO updateDevice(String token, DeviceDTO deviceDto);
+    T updateDevice(String token, T deviceDto);
 
-    List<DeviceDTO> selectAll();
+    List<T> selectAll();
 
-    DeviceDTO selectByToken(String token);
+    T selectByToken(String token);
 
     String getDeviceType();
 }

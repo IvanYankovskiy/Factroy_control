@@ -1,11 +1,23 @@
 package com.factory.control.controller.dto;
 
+import com.fasterxml.jackson.annotation.JsonSubTypes;
+import com.fasterxml.jackson.annotation.JsonTypeInfo;
 import lombok.Data;
 import org.hibernate.validator.constraints.Length;
 
 import javax.validation.constraints.NotNull;
 import java.io.Serializable;
 
+@JsonTypeInfo(
+        use = JsonTypeInfo.Id.NAME,
+        include = JsonTypeInfo.As.PROPERTY,
+        property = "deviceType",
+        visible = true
+)
+@JsonSubTypes({
+        @JsonSubTypes.Type(value = ExtruderDTO.class, name = "EXTRUDER"),
+        @JsonSubTypes.Type(value = DeviceDTO.class, name = "ANY")
+})
 @Data
 public class DeviceDTO implements Serializable {
 
