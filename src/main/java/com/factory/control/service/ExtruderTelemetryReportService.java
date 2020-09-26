@@ -4,32 +4,33 @@ import com.factory.control.controller.dto.ExtruderTelemetryReportDTO;
 import com.factory.control.controller.mapper.ExtruderTelemetryReportMapper;
 import com.factory.control.domain.bo.ExtruderTelemetryReport;
 import com.factory.control.domain.entities.ExtruderTelemetry;
-import com.factory.control.domain.entities.device.Device;
+import com.factory.control.domain.entities.device.Extruder;
 import com.factory.control.repository.ExtruderTelemetryReportRepository;
-import com.factory.control.repository.device.DeviceBaseRepository;
+import com.factory.control.repository.device.ExtruderRepository;
 import com.factory.control.service.exception.DeviceIsNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.math.BigDecimal;
+import java.math.RoundingMode;
 import java.time.OffsetDateTime;
 import java.util.List;
-import java.util.Objects;
+import java.util.Optional;
 
 @Service
 public class ExtruderTelemetryReportService {
 
     private final ExtruderTelemetryReportRepository repository;
 
-    private final DeviceBaseRepository deviceRepository;
+    private final ExtruderRepository extruderRepository;
 
     private final ExtruderTelemetryReportMapper mapper;
 
     @Autowired
-    public ExtruderTelemetryReportService(ExtruderTelemetryReportRepository repository, DeviceBaseRepository deviceRepository,
+    public ExtruderTelemetryReportService(ExtruderTelemetryReportRepository repository, ExtruderRepository extruderRepository,
                                           ExtruderTelemetryReportMapper mapper) {
         this.repository = repository;
-        this.deviceRepository = deviceRepository;
+        this.extruderRepository = extruderRepository;
         this.mapper = mapper;
     }
 
@@ -58,18 +59,18 @@ public class ExtruderTelemetryReportService {
     }
 
     public ExtruderTelemetryReportDTO getTelemetryReportByPeriod(String token, OffsetDateTime startOfPeriod, OffsetDateTime endOfPeriod) {
-        Device device = deviceRepository.findByToken(token);
-        if (Objects.isNull(device)) {
-            throw new DeviceIsNotFoundException(token);
-        }
+        Extruder device = Optional.of(extruderRepository.findByToken(token))
+                .orElseThrow(() -> new DeviceIsNotFoundException(token));
         List<ExtruderTelemetry> telemetryList = repository
                 .findExtruderTelemetriesByDeviceIdIsAndTimeAfterAndTimeBeforeOrderByTime(device, startOfPeriod, endOfPeriod);
 
-        ExtruderTelemetryReport report = computeAverageReportMetrics(telemetryList, startOfPeriod, endOfPeriod);
+        ExtruderTelemetryReport report = computeReportMetrics(telemetryList, startOfPeriod, endOfPeriod, device.getCircumference());
         return mapper.fromEntityToDTO(report);
     }
 
-    private ExtruderTelemetryReport computeAverageReportMetrics(List<ExtruderTelemetry> telemetry, OffsetDateTime startOfPeriod, OffsetDateTime endOfPeriod) {
+    private ExtruderTelemetryReport computeReportMetrics(List<ExtruderTelemetry> telemetry,
+                                                         OffsetDateTime startOfPeriod, OffsetDateTime endOfPeriod,
+                                                         BigDecimal circumference) {
         ExtruderTelemetryReport report = new ExtruderTelemetryReport();
         report.setStartOfPeriod(startOfPeriod);
         report.setEndOfPeriod(endOfPeriod);
@@ -77,8 +78,11 @@ public class ExtruderTelemetryReportService {
         BigDecimal summarizedVolume = BigDecimal.valueOf(0.00);
         for (ExtruderTelemetry tm : telemetry) {
             BigDecimal bdCounter = BigDecimal.valueOf(tm.getCounter());
-            BigDecimal instantLength = tm.getDiameter().multiply(bdCounter);
-            BigDecimal instantVolume = tm.getDensity().multiply(instantLength);
+            BigDecimal instantLength = circumference.multiply(bdCounter);
+            BigDecimal instantVolume = tm.getDiameter()
+                    .multiply(tm.getDiameter()).multiply(tm.getDensity())
+                    .multiply(instantLength)
+                    .divide(BigDecimal.valueOf(4), RoundingMode.HALF_DOWN);
             summarizedLength = summarizedLength.add(instantLength);
             summarizedVolume = summarizedVolume.add(instantVolume);
         }
