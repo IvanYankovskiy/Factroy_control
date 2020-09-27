@@ -1,6 +1,6 @@
 package com.factory.control.controller.mapper;
 
-import com.factory.control.controller.dto.ExtruderTelemetryReportDTO;
+import com.factory.control.controller.dto.report.extruder.ExtruderTelemetryReportDTO;
 import com.factory.control.domain.bo.ExtruderTelemetryReport;
 import org.mapstruct.*;
 

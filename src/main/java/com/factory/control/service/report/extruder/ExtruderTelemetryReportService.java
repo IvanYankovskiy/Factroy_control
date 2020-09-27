@@ -1,6 +1,6 @@
-package com.factory.control.service;
+package com.factory.control.service.report.extruder;
 
-import com.factory.control.controller.dto.ExtruderTelemetryReportDTO;
+import com.factory.control.controller.dto.report.extruder.ExtruderTelemetryReportDTO;
 import com.factory.control.controller.mapper.ExtruderTelemetryReportMapper;
 import com.factory.control.domain.bo.ExtruderTelemetryReport;
 import com.factory.control.domain.entities.ExtruderTelemetry;

@@ -1,0 +1,42 @@
+package com.factory.control.controller.dto;
+
+import com.factory.control.controller.dto.report.extruder.ExtruderRawTelemetryReportDTO;
+import com.factory.control.service.report.extruder.ExtruderRawTelemetryReportService;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RestController;
+
+import java.time.Duration;
+
+@RestController
+public class ExtruderRawTelemetryReportController {
+    
+    private final ExtruderRawTelemetryReportService service;
+
+    @Autowired
+    public ExtruderRawTelemetryReportController(ExtruderRawTelemetryReportService service) {
+        this.service = service;
+    }
+
+    @GetMapping("extruder/{token}/report/raw/lasthour")
+    public ExtruderRawTelemetryReportDTO getLastHourRawTelemetry(@PathVariable String token) {
+        return service.getRawTelemetryReportForLastDuration(token, Duration.ofHours(1));
+    }
+
+    @GetMapping("extruder/{token}/report/raw/last12hours")
+    public ExtruderRawTelemetryReportDTO getLast12HoursRawTelemetry(@PathVariable String token) {
+        return service.getRawTelemetryReportForLastDuration(token, Duration.ofHours(12));
+    }
+
+    @GetMapping("extruder/{token}/report/raw/lastweek")
+    public ExtruderRawTelemetryReportDTO getLastWeekRawTelemetry(@PathVariable String token) {
+        return service.getRawTelemetryReportForLastDuration(token, Duration.ofDays(7));
+    }
+
+    @GetMapping("extruder/{token}/report/raw/lastmonth")
+    public ExtruderRawTelemetryReportDTO getLastMonthRawTelemetry(@PathVariable String token) {
+        return service.getRawTelemetryReportForLastDuration(token, Duration.ofDays(30));
+    }
+    
+}

@@ -1,7 +1,7 @@
 package com.factory.control.controller;
 
-import com.factory.control.controller.dto.ExtruderTelemetryReportDTO;
-import com.factory.control.service.ExtruderTelemetryReportService;
+import com.factory.control.controller.dto.report.extruder.ExtruderTelemetryReportDTO;
+import com.factory.control.service.report.extruder.ExtruderTelemetryReportService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
