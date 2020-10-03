@@ -21,6 +21,7 @@ import org.testcontainers.shaded.com.google.common.collect.Lists;
 import java.math.BigDecimal;
 import java.time.OffsetDateTime;
 import java.util.List;
+import java.util.Optional;
 import java.util.UUID;
 
 @DataJpaTest
@@ -68,12 +69,12 @@ class ExtruderTelemetryReportRepositoryDAOTest {
         repository.flush();
 
         //when
-        List<ExtruderTelemetry> actual = repository.findExtruderTelemetriesByDeviceIdIsAndTimeAfterAndTimeBeforeOrderByTime(
+        Optional<List<ExtruderTelemetry>> actual = repository.findExtruderTelemetriesByDeviceIdIsAndTimeAfterAndTimeBeforeOrderByTime(
                 device, now.minusMinutes(120), now);
 
-        Assertions.assertNotNull(actual);
-        Assertions.assertEquals(2, actual.size());
-        Assertions.assertEquals(Lists.newArrayList(entity2, entity3), actual);
+        Assertions.assertTrue(actual.isPresent());
+        Assertions.assertEquals(2, actual.get().size());
+        Assertions.assertEquals(Lists.newArrayList(entity2, entity3), actual.get());
     }
 
     private Device createDevice() {

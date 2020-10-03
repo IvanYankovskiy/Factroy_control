@@ -1,4 +1,4 @@
-package com.factory.control.controller.dto;
+package com.factory.control.controller.report.extruder;
 
 import com.factory.control.controller.dto.report.extruder.ExtruderRawTelemetryReportDTO;
 import com.factory.control.service.report.extruder.ExtruderRawTelemetryReportService;

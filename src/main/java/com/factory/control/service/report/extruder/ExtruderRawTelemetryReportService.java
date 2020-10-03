@@ -14,6 +14,7 @@ import org.springframework.stereotype.Service;
 
 import java.time.Duration;
 import java.time.OffsetDateTime;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -45,7 +46,8 @@ public class ExtruderRawTelemetryReportService {
         Extruder device = Optional.of(extruderRepository.findByToken(token))
                 .orElseThrow(() -> new DeviceIsNotFoundException(token));
         List<ExtruderTelemetry> telemetryList = repository
-                .findExtruderTelemetriesByDeviceIdIsAndTimeAfterAndTimeBeforeOrderByTime(device, startOfPeriod, endOfPeriod);
+                .findExtruderTelemetriesByDeviceIdIsAndTimeAfterAndTimeBeforeOrderByTime(device, startOfPeriod, endOfPeriod)
+                .orElse(new ArrayList<>());
 
         ExtruderRawTelemetryReportDTO report = new ExtruderRawTelemetryReportDTO();
         ExtruderDTO extruderDTO = extruderMapper.fromEntityToDto(device);

@@ -1,6 +1,7 @@
 package com.factory.control.controller.dto.report.extruder;
 
 import com.factory.control.domain.entities.ExtruderTelemetry;
+import com.fasterxml.jackson.annotation.JsonFormat;
 import lombok.Value;
 
 import java.math.BigDecimal;
@@ -15,6 +16,7 @@ public class ExtruderRawTelemetryRecordDTO {
 
     BigDecimal diameter;
 
+    @JsonFormat(pattern="yyyy-MM-dd'T'HH:mm:ss.SSSXXX")
     OffsetDateTime time;
 
     public ExtruderRawTelemetryRecordDTO(ExtruderTelemetry telemetry) {

@@ -14,6 +14,7 @@ import org.springframework.stereotype.Service;
 import java.math.BigDecimal;
 import java.math.RoundingMode;
 import java.time.OffsetDateTime;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -62,7 +63,8 @@ public class ExtruderTelemetryReportService {
         Extruder device = Optional.of(extruderRepository.findByToken(token))
                 .orElseThrow(() -> new DeviceIsNotFoundException(token));
         List<ExtruderTelemetry> telemetryList = repository
-                .findExtruderTelemetriesByDeviceIdIsAndTimeAfterAndTimeBeforeOrderByTime(device, startOfPeriod, endOfPeriod);
+                .findExtruderTelemetriesByDeviceIdIsAndTimeAfterAndTimeBeforeOrderByTime(device, startOfPeriod, endOfPeriod)
+                .orElse(new ArrayList<>());
 
         ExtruderTelemetryReport report = computeReportMetrics(telemetryList, startOfPeriod, endOfPeriod, device.getCircumference());
         return mapper.fromEntityToDTO(report);
