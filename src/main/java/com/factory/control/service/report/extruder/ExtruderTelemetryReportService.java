@@ -70,7 +70,7 @@ public class ExtruderTelemetryReportService {
         return mapper.fromEntityToDTO(report);
     }
 
-    private ExtruderTelemetryReport computeReportMetrics(List<ExtruderTelemetry> telemetry,
+    protected ExtruderTelemetryReport computeReportMetrics(List<ExtruderTelemetry> telemetry,
                                                          OffsetDateTime startOfPeriod, OffsetDateTime endOfPeriod,
                                                          BigDecimal circumference) {
         ExtruderTelemetryReport report = new ExtruderTelemetryReport();
@@ -84,13 +84,22 @@ public class ExtruderTelemetryReportService {
             BigDecimal instantVolume = tm.getDiameter()
                     .multiply(tm.getDiameter()).multiply(tm.getDensity())
                     .multiply(instantLength)
-                    .divide(BigDecimal.valueOf(4), RoundingMode.HALF_DOWN);
+                    .divide(BigDecimal.valueOf(4), RoundingMode.HALF_UP);
             summarizedLength = summarizedLength.add(instantLength);
             summarizedVolume = summarizedVolume.add(instantVolume);
         }
-        report.setLengthPerformance(summarizedLength);
-        report.setVolumetricPerformance(summarizedVolume);
+        report.setLengthPerformance(convertMillimetersToMeters(summarizedLength));
+        report.setVolumetricPerformance(convertCubicMillimetersToCubicMeters(summarizedVolume));
         return report;
+    }
+
+
+    private BigDecimal convertMillimetersToMeters(BigDecimal lengthInMeters) {
+        return lengthInMeters.divide(BigDecimal.valueOf(1000), RoundingMode.HALF_UP);
+    }
+
+    private BigDecimal convertCubicMillimetersToCubicMeters(BigDecimal volumeWithCubicMillimeters) {
+        return volumeWithCubicMillimeters.divide(BigDecimal.valueOf(1000000000), RoundingMode.HALF_UP);
     }
 
 }
