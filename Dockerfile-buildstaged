@@ -1,0 +1,20 @@
+FROM alpine/git as repo
+WORKDIR /app
+run git clone --single-branch -b custom https://github.com/IvanYankovskiy/Factory_control.git
+
+FROM maven:3.5-jdk-8-alpine as build
+WORKDIR /app
+COPY --from=repo /app/Factory_control /app
+RUN mvn clean install -DskipTests
+
+FROM openjdk:8-jdk-alpine
+EXPOSE 8080
+
+WORKDIR root/
+COPY --from=repo /app /root
+ARG JAR_FILE=target/control-*.jar
+ADD ${JAR_FILE} ./application.jar
+
+ENTRYPOINT ["java", "-server", "-Xms256M", "-Xmx256M",\
+            "-XX:+HeapDumpOnOutOfMemoryError", "-XX:HeapDumpPath=dump.hprof", "-Djava.security.egd=/dev/zrandom",\
+            "-jar", "/root/application.jar"]

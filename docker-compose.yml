@@ -12,7 +12,7 @@
       image: fc_application
       build:
         context: ./
-        dockerfile: Dockerfile
+        dockerfile: Dockerfile-buildstaged
       ports:
          - 8080:8080
       env_file:
