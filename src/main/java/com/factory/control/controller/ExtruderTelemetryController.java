@@ -1,7 +1,7 @@
 package com.factory.control.controller;
 
 import com.factory.control.controller.dto.ExtruderTelemetryDTO;
-import com.factory.control.service.ExtruderTelemetryService;
+import com.factory.control.service.telemetry.ExtruderTelemetryService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
@@ -10,7 +10,7 @@ import javax.validation.Valid;
 @RestController
 public class ExtruderTelemetryController {
 
-    private ExtruderTelemetryService extruderTelemetryService;
+    private final ExtruderTelemetryService extruderTelemetryService;
 
     @Autowired
     public ExtruderTelemetryController(ExtruderTelemetryService extruderTelemetryService) {

@@ -1,4 +1,4 @@
-package com.factory.control.service;
+package com.factory.control.service.telemetry;
 
 import com.factory.control.controller.dto.ExtruderTelemetryDTO;
 import com.factory.control.controller.mapper.ExtruderTelemetryMapper;
@@ -16,11 +16,11 @@ import java.util.Objects;
 @Service
 public class ExtruderTelemetryService {
 
-    private ExtruderTelemetryMapper extruderTelemetryMapper;
+    private final ExtruderTelemetryMapper extruderTelemetryMapper;
 
-    private ExtruderTelemetryRepository repository;
+    private final ExtruderTelemetryRepository repository;
 
-    private DeviceBaseRepository deviceRepository;
+    private final DeviceBaseRepository deviceRepository;
 
     @Autowired
     public ExtruderTelemetryService(ExtruderTelemetryMapper extruderTelemetryMapper, ExtruderTelemetryRepository repository, DeviceBaseRepository deviceRepository) {
