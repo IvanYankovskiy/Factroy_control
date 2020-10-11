@@ -7,14 +7,12 @@ WORKDIR /app
 COPY --from=repo /app/Factory_control /app
 RUN mvn clean install -DskipTests
 
-FROM openjdk:8-jdk-alpine
+FROM openjdk:8-jdk-alpine as app
 EXPOSE 8080
 
 WORKDIR root/
-COPY --from=repo /app /root
-ARG JAR_FILE=target/control-*.jar
-ADD ${JAR_FILE} ./application.jar
-
+COPY --from=build /app /root
+RUN mv target/control-*.jar target/application.jar
 ENTRYPOINT ["java", "-server", "-Xms256M", "-Xmx256M",\
             "-XX:+HeapDumpOnOutOfMemoryError", "-XX:HeapDumpPath=dump.hprof", "-Djava.security.egd=/dev/zrandom",\
-            "-jar", "/root/application.jar"]
+            "-jar", "/root/target/application.jar"]
