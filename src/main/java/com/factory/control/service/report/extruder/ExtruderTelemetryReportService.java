@@ -28,11 +28,12 @@ public class ExtruderTelemetryReportService {
     private final ExtruderTelemetryReportMapper mapper;
 
     @Autowired
-    public ExtruderTelemetryReportService(ExtruderTelemetryReportRepository repository, ExtruderRepository extruderRepository,
-                                          ExtruderTelemetryReportMapper mapper) {
+    public ExtruderTelemetryReportService(ExtruderTelemetryReportRepository repository,
+                                          ExtruderRepository extruderRepository,
+                                          ExtruderTelemetryReportMapper extruderTelemetryReportMapper) {
         this.repository = repository;
         this.extruderRepository = extruderRepository;
-        this.mapper = mapper;
+        this.mapper = extruderTelemetryReportMapper;
     }
 
     public ExtruderTelemetryReportDTO getTelemetryReportForLastHour(String token) {
@@ -77,7 +78,7 @@ public class ExtruderTelemetryReportService {
         report.setStartOfPeriod(startOfPeriod);
         report.setEndOfPeriod(endOfPeriod);
         BigDecimal summarizedLength = BigDecimal.valueOf(0.00);
-        BigDecimal summarizedVolume = BigDecimal.valueOf(0.00);
+        BigDecimal summarizedWeight = BigDecimal.valueOf(0.00);
         for (ExtruderTelemetry tm : telemetry) {
             BigDecimal bdCounter = BigDecimal.valueOf(tm.getCounter());
             BigDecimal instantLength = circumference.multiply(bdCounter);
@@ -86,10 +87,10 @@ public class ExtruderTelemetryReportService {
                     .multiply(instantLength)
                     .divide(BigDecimal.valueOf(4), RoundingMode.HALF_UP);
             summarizedLength = summarizedLength.add(instantLength);
-            summarizedVolume = summarizedVolume.add(instantVolume);
+            summarizedWeight = summarizedWeight.add(instantVolume);
         }
         report.setLengthPerformance(convertMillimetersToMeters(summarizedLength));
-        report.setVolumetricPerformance(convertCubicMillimetersToCubicMeters(summarizedVolume));
+        report.setWeightPerformance(convertCubicMillimetersToCubicMeters(summarizedWeight));
         return report;
     }
 
@@ -99,7 +100,7 @@ public class ExtruderTelemetryReportService {
     }
 
     private BigDecimal convertCubicMillimetersToCubicMeters(BigDecimal volumeWithCubicMillimeters) {
-        return volumeWithCubicMillimeters.divide(BigDecimal.valueOf(1000000000), RoundingMode.HALF_UP);
+        return volumeWithCubicMillimeters.divide(BigDecimal.valueOf(1000000000000L), RoundingMode.HALF_UP);
     }
 
 }

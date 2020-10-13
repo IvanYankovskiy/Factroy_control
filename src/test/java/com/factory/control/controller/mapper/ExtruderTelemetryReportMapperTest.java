@@ -19,7 +19,7 @@ class ExtruderTelemetryReportMapperTest {
         OffsetDateTime now = OffsetDateTime.now();
         ExtruderTelemetryReport entity = new ExtruderTelemetryReport();
         entity.setLengthPerformance(BigDecimal.valueOf(15.24));
-        entity.setVolumetricPerformance(BigDecimal.valueOf(1.54));
+        entity.setWeightPerformance(BigDecimal.valueOf(1.54));
         entity.setStartOfPeriod(now.minusHours(1));
         entity.setEndOfPeriod(now);
 

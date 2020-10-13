@@ -12,7 +12,7 @@ public class ExtruderTelemetryReportDTO implements Serializable {
 
     private Double lengthPerformance;
 
-    private Double volumetricPerformance;
+    private Double weightPerformance;
 
     @JsonProperty("startOfPeriod")
     @JsonFormat(pattern="yyyy-MM-dd'T'HH:mm:ss.SSSXXX")

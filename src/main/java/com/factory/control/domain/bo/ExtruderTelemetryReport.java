@@ -10,7 +10,7 @@ public class ExtruderTelemetryReport {
 
     private BigDecimal lengthPerformance = BigDecimal.valueOf(0.0);
 
-    private BigDecimal volumetricPerformance = BigDecimal.valueOf(0.0);
+    private BigDecimal weightPerformance = BigDecimal.valueOf(0.0);
 
     private OffsetDateTime startOfPeriod;
 
