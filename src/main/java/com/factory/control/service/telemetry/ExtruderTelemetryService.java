@@ -23,7 +23,9 @@ public class ExtruderTelemetryService {
     private final DeviceBaseRepository deviceRepository;
 
     @Autowired
-    public ExtruderTelemetryService(ExtruderTelemetryMapper extruderTelemetryMapper, ExtruderTelemetryRepository repository, DeviceBaseRepository deviceRepository) {
+    public ExtruderTelemetryService(ExtruderTelemetryMapper extruderTelemetryMapper,
+                                    ExtruderTelemetryRepository repository,
+                                    DeviceBaseRepository deviceRepository) {
         this.repository = repository;
         this.extruderTelemetryMapper = extruderTelemetryMapper;
         this.deviceRepository = deviceRepository;

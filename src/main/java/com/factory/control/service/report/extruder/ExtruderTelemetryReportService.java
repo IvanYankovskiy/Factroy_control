@@ -11,8 +11,6 @@ import com.factory.control.service.exception.DeviceIsNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.math.BigDecimal;
-import java.math.RoundingMode;
 import java.time.OffsetDateTime;
 import java.util.ArrayList;
 import java.util.List;
@@ -27,13 +25,17 @@ public class ExtruderTelemetryReportService {
 
     private final ExtruderTelemetryReportMapper mapper;
 
+    private final ExtruderReportMetricsCalculator extruderReportMetricsCalculator;
+
     @Autowired
     public ExtruderTelemetryReportService(ExtruderTelemetryReportRepository repository,
                                           ExtruderRepository extruderRepository,
-                                          ExtruderTelemetryReportMapper extruderTelemetryReportMapper) {
+                                          ExtruderTelemetryReportMapper extruderTelemetryReportMapper,
+                                          ExtruderReportMetricsCalculator extruderReportMetricsCalculator) {
         this.repository = repository;
         this.extruderRepository = extruderRepository;
         this.mapper = extruderTelemetryReportMapper;
+        this.extruderReportMetricsCalculator = extruderReportMetricsCalculator;
     }
 
     public ExtruderTelemetryReportDTO getTelemetryReportForLastHour(String token) {
@@ -67,40 +69,8 @@ public class ExtruderTelemetryReportService {
                 .findExtruderTelemetriesByDeviceIdIsAndTimeAfterAndTimeBeforeOrderByTime(device, startOfPeriod, endOfPeriod)
                 .orElse(new ArrayList<>());
 
-        ExtruderTelemetryReport report = computeReportMetrics(telemetryList, startOfPeriod, endOfPeriod, device.getCircumference());
+        ExtruderTelemetryReport report = extruderReportMetricsCalculator
+                .computeReportMetrics(telemetryList, startOfPeriod, endOfPeriod, device.getCircumference());
         return mapper.fromEntityToDTO(report);
     }
-
-    protected ExtruderTelemetryReport computeReportMetrics(List<ExtruderTelemetry> telemetry,
-                                                         OffsetDateTime startOfPeriod, OffsetDateTime endOfPeriod,
-                                                         BigDecimal circumference) {
-        ExtruderTelemetryReport report = new ExtruderTelemetryReport();
-        report.setStartOfPeriod(startOfPeriod);
-        report.setEndOfPeriod(endOfPeriod);
-        BigDecimal summarizedLength = BigDecimal.valueOf(0.00);
-        BigDecimal summarizedWeight = BigDecimal.valueOf(0.00);
-        for (ExtruderTelemetry tm : telemetry) {
-            BigDecimal bdCounter = BigDecimal.valueOf(tm.getCounter());
-            BigDecimal instantLength = circumference.multiply(bdCounter);
-            BigDecimal instantVolume = tm.getDiameter()
-                    .multiply(tm.getDiameter()).multiply(tm.getDensity())
-                    .multiply(instantLength)
-                    .divide(BigDecimal.valueOf(4), RoundingMode.HALF_UP);
-            summarizedLength = summarizedLength.add(instantLength);
-            summarizedWeight = summarizedWeight.add(instantVolume);
-        }
-        report.setLengthPerformance(convertMillimetersToMeters(summarizedLength));
-        report.setWeightPerformance(convertCubicMillimetersToCubicMeters(summarizedWeight));
-        return report;
-    }
-
-
-    private BigDecimal convertMillimetersToMeters(BigDecimal lengthInMeters) {
-        return lengthInMeters.divide(BigDecimal.valueOf(1000), RoundingMode.HALF_UP);
-    }
-
-    private BigDecimal convertCubicMillimetersToCubicMeters(BigDecimal volumeWithCubicMillimeters) {
-        return volumeWithCubicMillimeters.divide(BigDecimal.valueOf(1000000000000L), RoundingMode.HALF_UP);
-    }
-
 }
