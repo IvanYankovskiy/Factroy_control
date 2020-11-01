@@ -31,7 +31,7 @@ public class ExtruderReportMetricsCalculator {
             summarizedWeight = summarizedWeight.add(instantVolume);
         }
         report.setLengthPerformance(convertMillimetersToMeters(summarizedLength));
-        report.setWeightPerformance(convertCubicMillimetersToCubicMeters(summarizedWeight));
+        report.setWeightPerformance(convertToKilograms(summarizedWeight));
         return report;
     }
 
@@ -40,7 +40,7 @@ public class ExtruderReportMetricsCalculator {
         return lengthInMeters.divide(BigDecimal.valueOf(1000), RoundingMode.HALF_UP);
     }
 
-    private BigDecimal convertCubicMillimetersToCubicMeters(BigDecimal volumeWithCubicMillimeters) {
+    private BigDecimal convertToKilograms(BigDecimal volumeWithCubicMillimeters) {
         return volumeWithCubicMillimeters.divide(BigDecimal.valueOf(1000000000000L), RoundingMode.HALF_UP);
     }
 }
