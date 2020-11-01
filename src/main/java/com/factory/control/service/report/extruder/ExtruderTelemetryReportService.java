@@ -11,6 +11,7 @@ import com.factory.control.service.exception.DeviceIsNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.time.Duration;
 import java.time.OffsetDateTime;
 import java.util.ArrayList;
 import java.util.List;
@@ -38,27 +39,9 @@ public class ExtruderTelemetryReportService {
         this.extruderReportMetricsCalculator = extruderReportMetricsCalculator;
     }
 
-    public ExtruderTelemetryReportDTO getTelemetryReportForLastHour(String token) {
+    public ExtruderTelemetryReportDTO getTelemetryReportForLastDuration(String token, Duration period) {
         OffsetDateTime endOfPeriod = OffsetDateTime.now();
-        OffsetDateTime startOfPeriod = endOfPeriod.minusHours(1);
-        return getTelemetryReportByPeriod(token, startOfPeriod, endOfPeriod);
-    }
-
-    public ExtruderTelemetryReportDTO getTelemetryReportForLast12Hours(String token) {
-        OffsetDateTime endOfPeriod = OffsetDateTime.now();
-        OffsetDateTime startOfPeriod = endOfPeriod.minusHours(12);
-        return getTelemetryReportByPeriod(token, startOfPeriod, endOfPeriod);
-    }
-
-    public ExtruderTelemetryReportDTO getTelemetryReportForLastWeek(String token) {
-        OffsetDateTime endOfPeriod = OffsetDateTime.now();
-        OffsetDateTime startOfPeriod = endOfPeriod.minusWeeks(1);
-        return getTelemetryReportByPeriod(token, startOfPeriod, endOfPeriod);
-    }
-
-    public ExtruderTelemetryReportDTO getTelemetryReportForLastMonth(String token) {
-        OffsetDateTime endOfPeriod = OffsetDateTime.now();
-        OffsetDateTime startOfPeriod = endOfPeriod.minusMonths(1);
+        OffsetDateTime startOfPeriod = endOfPeriod.minus(period);
         return getTelemetryReportByPeriod(token, startOfPeriod, endOfPeriod);
     }
 
