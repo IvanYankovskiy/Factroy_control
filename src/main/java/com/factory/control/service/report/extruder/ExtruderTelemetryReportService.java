@@ -6,6 +6,7 @@ import com.factory.control.domain.bo.ExtruderTelemetryReport;
 import com.factory.control.domain.entities.ExtruderTelemetry;
 import com.factory.control.domain.entities.device.Extruder;
 import com.factory.control.repository.ExtruderTelemetryReportRepository;
+import com.factory.control.repository.ExtruderTelemetryRepository;
 import com.factory.control.repository.device.ExtruderRepository;
 import com.factory.control.service.exception.DeviceIsNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -22,6 +23,8 @@ public class ExtruderTelemetryReportService {
 
     private final ExtruderTelemetryReportRepository repository;
 
+    private final ExtruderTelemetryRepository extruderTelemetryRepository;
+
     private final ExtruderRepository extruderRepository;
 
     private final ExtruderTelemetryReportMapper mapper;
@@ -32,11 +35,13 @@ public class ExtruderTelemetryReportService {
     public ExtruderTelemetryReportService(ExtruderTelemetryReportRepository repository,
                                           ExtruderRepository extruderRepository,
                                           ExtruderTelemetryReportMapper extruderTelemetryReportMapper,
-                                          ExtruderReportMetricsCalculator extruderReportMetricsCalculator) {
+                                          ExtruderReportMetricsCalculator extruderReportMetricsCalculator,
+                                          ExtruderTelemetryRepository extruderTelemetryRepository) {
         this.repository = repository;
         this.extruderRepository = extruderRepository;
         this.mapper = extruderTelemetryReportMapper;
         this.extruderReportMetricsCalculator = extruderReportMetricsCalculator;
+        this.extruderTelemetryRepository = extruderTelemetryRepository;
     }
 
     public ExtruderTelemetryReportDTO getTelemetryReportForLastDuration(String token, Duration period) {
@@ -48,7 +53,7 @@ public class ExtruderTelemetryReportService {
     public ExtruderTelemetryReportDTO getTelemetryReportByPeriod(String token, OffsetDateTime startOfPeriod, OffsetDateTime endOfPeriod) {
         Extruder device = Optional.of(extruderRepository.findByToken(token))
                 .orElseThrow(() -> new DeviceIsNotFoundException(token));
-        List<ExtruderTelemetry> telemetryList = repository
+        List<ExtruderTelemetry> telemetryList = extruderTelemetryRepository
                 .findExtruderTelemetriesByDeviceIdIsAndTimeAfterAndTimeBeforeOrderByTime(device, startOfPeriod, endOfPeriod)
                 .orElse(new ArrayList<>());
 

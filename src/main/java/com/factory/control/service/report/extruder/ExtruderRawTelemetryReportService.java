@@ -6,7 +6,7 @@ import com.factory.control.controller.dto.report.extruder.ExtruderRawTelemetryRe
 import com.factory.control.controller.mapper.ExtruderMapper;
 import com.factory.control.domain.entities.ExtruderTelemetry;
 import com.factory.control.domain.entities.device.Extruder;
-import com.factory.control.repository.ExtruderTelemetryReportRepository;
+import com.factory.control.repository.ExtruderTelemetryRepository;
 import com.factory.control.repository.device.ExtruderRepository;
 import com.factory.control.service.exception.DeviceIsNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -22,14 +22,14 @@ import java.util.stream.Collectors;
 @Service
 public class ExtruderRawTelemetryReportService {
 
-    private final ExtruderTelemetryReportRepository repository;
+    private final ExtruderTelemetryRepository repository;
 
     private final ExtruderRepository extruderRepository;
 
     private final ExtruderMapper extruderMapper;
 
     @Autowired
-    public ExtruderRawTelemetryReportService(ExtruderTelemetryReportRepository repository, ExtruderRepository extruderRepository,
+    public ExtruderRawTelemetryReportService(ExtruderTelemetryRepository repository, ExtruderRepository extruderRepository,
                                              ExtruderMapper extruderMapper) {
         this.repository = repository;
         this.extruderRepository = extruderRepository;

@@ -4,7 +4,7 @@ import com.factory.control.configuration.PostgresSharedContainer;
 import com.factory.control.domain.entities.ExtruderTelemetry;
 import com.factory.control.domain.entities.device.Device;
 import com.factory.control.domain.entities.device.DeviceType;
-import com.factory.control.repository.ExtruderTelemetryReportRepository;
+import com.factory.control.repository.ExtruderTelemetryRepository;
 import org.junit.ClassRule;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.DisplayName;
@@ -28,8 +28,8 @@ import java.util.UUID;
 @ContextConfiguration(initializers = PostgresSharedContainer.Initializer.class)
 @AutoConfigureTestDatabase(replace = AutoConfigureTestDatabase.Replace.NONE)
 @Testcontainers
-@DisplayName("ExtruderTelemetryReportRepository DAO test")
-class ExtruderTelemetryReportRepositoryDAOTest {
+@DisplayName("ExtruderTelemetryRepository DAO test")
+class ExtruderTelemetryRepositoryDAOTest {
 
     @ClassRule
     public static PostgreSQLContainer postgreSQLContainer = PostgresSharedContainer.getInstance();
@@ -38,7 +38,7 @@ class ExtruderTelemetryReportRepositoryDAOTest {
     private TestEntityManager testEntityManager;
 
     @Autowired
-    private ExtruderTelemetryReportRepository repository;
+    private ExtruderTelemetryRepository repository;
 
     @Test
     void test_selectByDeviceAndTimeBeforeAndTimeAfter() {
