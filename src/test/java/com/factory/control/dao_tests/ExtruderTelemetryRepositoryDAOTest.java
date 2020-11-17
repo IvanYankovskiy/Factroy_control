@@ -46,21 +46,21 @@ class ExtruderTelemetryRepositoryDAOTest {
 
         OffsetDateTime now = OffsetDateTime.now();
         ExtruderTelemetry entity1 = repository.save(new ExtruderTelemetry()
-                .setDeviceId(device)
+                .setDevice(device)
                 .setCounter(80)
                 .setDensity(BigDecimal.valueOf(1.0))
                 .setDiameter(BigDecimal.valueOf(1.75))
                 .setTime(now.minusMinutes(125))
         );
         ExtruderTelemetry entity2 = repository.save(new ExtruderTelemetry()
-                .setDeviceId(device)
+                .setDevice(device)
                 .setCounter(45)
                 .setDensity(BigDecimal.valueOf(1.0))
                 .setDiameter(BigDecimal.valueOf(1.75))
                 .setTime(now.minusMinutes(90))
         );
         ExtruderTelemetry entity3 = repository.save(new ExtruderTelemetry()
-                .setDeviceId(device)
+                .setDevice(device)
                 .setCounter(45)
                 .setDensity(BigDecimal.valueOf(1.0))
                 .setDiameter(BigDecimal.valueOf(1.75))
@@ -69,8 +69,8 @@ class ExtruderTelemetryRepositoryDAOTest {
         repository.flush();
 
         //when
-        Optional<List<ExtruderTelemetry>> actual = repository.findExtruderTelemetriesByDeviceIdIsAndTimeAfterAndTimeBeforeOrderByTime(
-                device, now.minusMinutes(120), now);
+        Optional<List<ExtruderTelemetry>> actual = repository.findTelemetriesInPeriod(
+                device.getId(), now.minusMinutes(120), now);
 
         Assertions.assertTrue(actual.isPresent());
         Assertions.assertEquals(2, actual.get().size());

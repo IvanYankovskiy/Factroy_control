@@ -54,11 +54,11 @@ public class ExtruderTelemetryReportService {
         Extruder device = Optional.of(extruderRepository.findByToken(token))
                 .orElseThrow(() -> new DeviceIsNotFoundException(token));
         List<ExtruderTelemetry> telemetryList = extruderTelemetryRepository
-                .findExtruderTelemetriesByDeviceIdIsAndTimeAfterAndTimeBeforeOrderByTime(device, startOfPeriod, endOfPeriod)
+                .findTelemetriesInPeriod(device.getId(), startOfPeriod, endOfPeriod)
                 .orElse(new ArrayList<>());
 
         ExtruderTelemetryReport report = extruderReportMetricsCalculator
-                .computeReportMetrics(telemetryList, startOfPeriod, endOfPeriod, device.getCircumference());
+                .computeReportMetricsHourly(telemetryList, startOfPeriod, endOfPeriod, device.getCircumference());
         return mapper.fromEntityToDTO(report);
     }
 }

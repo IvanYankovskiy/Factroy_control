@@ -37,7 +37,7 @@ public class ExtruderTelemetryService {
             throw new DeviceIsNotFoundException(token);
         }
         ExtruderTelemetry extruderTelemetry = extruderTelemetryMapper.fromDtoToEntity(telemetryDTO);
-        extruderTelemetry.setDeviceId(device);
+        extruderTelemetry.setDevice(device);
         extruderTelemetry.setTime(OffsetDateTime.now());
         repository.saveAndFlush(extruderTelemetry);
         return "ok";

@@ -26,7 +26,7 @@ public class ExtruderTelemetry {
     @Access(AccessType.PROPERTY)
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "device_id", nullable = false)
-    private Device deviceId;
+    private Device device;
 
     @Column(name = "counter", nullable = false)
     private Integer counter;
@@ -46,7 +46,7 @@ public class ExtruderTelemetry {
         if (o == null || getClass() != o.getClass()) return false;
         ExtruderTelemetry that = (ExtruderTelemetry) o;
         return Objects.equals(id, that.id) &&
-                Objects.equals(deviceId, that.deviceId) &&
+                Objects.equals(device, that.device) &&
                 Objects.equals(counter, that.counter) &&
                 Objects.equals(density, that.density) &&
                 Objects.equals(diameter, that.diameter) &&
@@ -55,6 +55,6 @@ public class ExtruderTelemetry {
 
     @Override
     public int hashCode() {
-        return Objects.hash(id, deviceId, counter, density, diameter, time);
+        return Objects.hash(id, device, counter, density, diameter, time);
     }
 }

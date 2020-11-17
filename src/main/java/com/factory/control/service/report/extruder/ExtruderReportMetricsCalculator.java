@@ -2,6 +2,7 @@ package com.factory.control.service.report.extruder;
 
 import com.factory.control.domain.bo.ExtruderTelemetryReport;
 import com.factory.control.domain.entities.ExtruderTelemetry;
+import com.factory.control.domain.entities.device.Extruder;
 import org.springframework.stereotype.Component;
 
 import java.math.BigDecimal;
@@ -12,9 +13,9 @@ import java.util.List;
 @Component
 public class ExtruderReportMetricsCalculator {
 
-    protected ExtruderTelemetryReport computeReportMetrics(List<ExtruderTelemetry> telemetry,
-                                                           OffsetDateTime startOfPeriod, OffsetDateTime endOfPeriod,
-                                                           BigDecimal circumference) {
+    protected ExtruderTelemetryReport computeReportMetricsHourly(List<ExtruderTelemetry> telemetry,
+                                                                 OffsetDateTime startOfPeriod, OffsetDateTime endOfPeriod,
+                                                                 BigDecimal circumference) {
         ExtruderTelemetryReport report = new ExtruderTelemetryReport();
         report.setStartOfPeriod(startOfPeriod);
         report.setEndOfPeriod(endOfPeriod);
@@ -32,6 +33,28 @@ public class ExtruderReportMetricsCalculator {
         }
         report.setLengthPerformance(convertMillimetersToMeters(summarizedLength));
         report.setWeightPerformance(convertToKilograms(summarizedWeight));
+        return report;
+    }
+
+    protected com.factory.control.domain.entities.ExtruderTelemetryReport computeReportMetricsHourly(List<ExtruderTelemetry> telemetry,
+                                                                                                     Extruder device) {
+        com.factory.control.domain.entities.ExtruderTelemetryReport report = new com.factory.control.domain.entities.ExtruderTelemetryReport();
+        BigDecimal summarizedLength = BigDecimal.valueOf(0.00);
+        BigDecimal summarizedWeight = BigDecimal.valueOf(0.00);
+        for (ExtruderTelemetry tm : telemetry) {
+            BigDecimal bdCounter = BigDecimal.valueOf(tm.getCounter());
+            BigDecimal instantLength = device.getCircumference().multiply(bdCounter);
+            BigDecimal instantVolume = tm.getDiameter()
+                    .multiply(tm.getDiameter()).multiply(tm.getDensity())
+                    .multiply(instantLength)
+                    .divide(BigDecimal.valueOf(4), RoundingMode.HALF_UP);
+            summarizedLength = summarizedLength.add(instantLength);
+            summarizedWeight = summarizedWeight.add(instantVolume);
+        }
+        report.setLength(convertMillimetersToMeters(summarizedLength));
+        report.setWeight(convertToKilograms(summarizedWeight));
+        report.setTime(telemetry.get(telemetry.size() - 1).getTime());
+        report.setDevice(device);
         return report;
     }
 
