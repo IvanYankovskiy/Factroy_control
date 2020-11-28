@@ -1,6 +1,8 @@
 package com.factory.control.service.report.extruder;
 
 import com.factory.control.domain.entities.ExtruderTelemetry;
+import com.factory.control.domain.entities.ExtruderTelemetryReport;
+import com.factory.control.domain.entities.device.Device;
 import com.factory.control.domain.entities.device.Extruder;
 import com.factory.control.repository.ExtruderTelemetryReportRepository;
 import com.factory.control.repository.ExtruderTelemetryRepository;
@@ -31,6 +33,13 @@ public class ExtruderTelemetryReportGenerator {
         this.telemetryReportRepository = telemetryReportRepository;
     }
 
+    public void generateForAllDevicesInPeriod(OffsetDateTime from, OffsetDateTime to) {
+        List<Device> devices = telemetryRepository.selectDistinctDevicesForPeriod(from, to);
+        for (Device device : devices) {
+            generateReportRecordsForDevice((Extruder) device, from, to);
+        }
+    }
+
     //please, read https://www.baeldung.com/spring-data-jpa-pagination-sorting
     //then find official docs and read carefully
     //then explore spring batch and also compare approach
@@ -42,7 +51,7 @@ public class ExtruderTelemetryReportGenerator {
      * @param to
      * @return
      */
-    public List<com.factory.control.domain.entities.ExtruderTelemetryReport> generateReportRecordsForDevice(Extruder device, OffsetDateTime from, OffsetDateTime to) {
+    public List<ExtruderTelemetryReport> generateReportRecordsForDevice(Extruder device, OffsetDateTime from, OffsetDateTime to) {
         List<ExtruderTelemetry> rawTelemetry = telemetryRepository.findTelemetriesInPeriod(device.getId(), from, to)
                 .orElse(new ArrayList<>());
         long hoursInPeriod = Duration.between(from, to).toHours();
@@ -67,6 +76,4 @@ public class ExtruderTelemetryReportGenerator {
         }
         return reports;
     }
-
-
 }

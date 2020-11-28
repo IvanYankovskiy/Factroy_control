@@ -15,11 +15,12 @@ import org.mockito.junit.jupiter.MockitoExtension;
 
 import java.math.BigDecimal;
 import java.time.OffsetDateTime;
-import java.time.ZoneOffset;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
+import static java.time.OffsetDateTime.of;
+import static java.time.ZoneOffset.UTC;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.ArgumentMatchers.anyList;
 import static org.mockito.ArgumentMatchers.eq;
@@ -45,8 +46,8 @@ class ExtruderTelemetryReportGeneratorTest {
     @DisplayName("Should load all raw telemetry, then compute reports divided hourly, save it, then delete raw")
     void shouldCreateReportsThenSaveItThenDeleteRawTelemetry() {
         // given
-        OffsetDateTime from = OffsetDateTime.of(2020, 10, 21, 23, 0, 0,0, ZoneOffset.UTC);
-        OffsetDateTime to = OffsetDateTime.of(2020, 10, 22, 23, 0, 0,0, ZoneOffset.UTC);
+        OffsetDateTime from = of(2020, 10, 21, 23, 0, 0,0, UTC);
+        OffsetDateTime to = of(2020, 10, 22, 23, 0, 0,0, UTC);
         Extruder device = new Extruder();
         device.setId(1);
         device.setCircumference(BigDecimal.valueOf(100.00));
@@ -68,17 +69,17 @@ class ExtruderTelemetryReportGeneratorTest {
 
     private List<ExtruderTelemetry> createRawTelemetry() {
         ExtruderTelemetry tm1 = new ExtruderTelemetry()
-                .setTime(OffsetDateTime.of(2020, 10, 22, 2, 15, 45,0, ZoneOffset.UTC));
+                .setTime(of(2020, 10, 22, 2, 15, 45,0, UTC));
         ExtruderTelemetry tm2 = new ExtruderTelemetry()
-                .setTime(OffsetDateTime.of(2020, 10, 22, 2, 16, 7,0, ZoneOffset.UTC));
+                .setTime(of(2020, 10, 22, 2, 16, 7,0, UTC));
         ExtruderTelemetry tm3 = new ExtruderTelemetry()
-                .setTime(OffsetDateTime.of(2020, 10, 22, 8, 1, 27,0, ZoneOffset.UTC));
+                .setTime(of(2020, 10, 22, 8, 1, 27,0, UTC));
         ExtruderTelemetry tm4 = new ExtruderTelemetry()
-                .setTime(OffsetDateTime.of(2020, 10, 22, 8, 1, 27,0, ZoneOffset.UTC));
+                .setTime(of(2020, 10, 22, 8, 1, 27,0, UTC));
         ExtruderTelemetry tm5 = new ExtruderTelemetry()
-                .setTime(OffsetDateTime.of(2020, 10, 22, 11, 46, 5,0, ZoneOffset.UTC));
+                .setTime(of(2020, 10, 22, 11, 46, 5,0, UTC));
         ExtruderTelemetry tm6 = new ExtruderTelemetry()
-                .setTime(OffsetDateTime.of(2020, 10, 22, 15, 4, 37,0, ZoneOffset.UTC));
+                .setTime(of(2020, 10, 22, 15, 4, 37,0, UTC));
         return Lists.newArrayList(tm1, tm2, tm3, tm4, tm5, tm6);
     }
 
@@ -86,8 +87,8 @@ class ExtruderTelemetryReportGeneratorTest {
     @DisplayName("Should return empty list when telemetry is not found")
     void shouldReturnEmptyListWhenRawTelemetryIsNotFound() {
         // given
-        OffsetDateTime from = OffsetDateTime.of(2020, 10, 21, 23, 0, 0,0, ZoneOffset.UTC);
-        OffsetDateTime to = OffsetDateTime.of(2020, 10, 22, 23, 0, 0,0, ZoneOffset.UTC);
+        OffsetDateTime from = of(2020, 10, 21, 23, 0, 0,0, UTC);
+        OffsetDateTime to = of(2020, 10, 22, 23, 0, 0,0, UTC);
         Extruder device = new Extruder();
         device.setId(1);
         device.setCircumference(BigDecimal.valueOf(100.00));
