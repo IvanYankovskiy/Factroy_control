@@ -47,10 +47,10 @@ public class ExtruderTelemetryReportService {
     public ExtruderTelemetryReportDTO getTelemetryReportForLastDuration(String token, Duration period) {
         OffsetDateTime endOfPeriod = OffsetDateTime.now();
         OffsetDateTime startOfPeriod = endOfPeriod.minus(period);
-        return getTelemetryReportByPeriod(token, startOfPeriod, endOfPeriod);
+        return getTelemetryReportByPeriodDirectly(token, startOfPeriod, endOfPeriod);
     }
 
-    public ExtruderTelemetryReportDTO getTelemetryReportByPeriod(String token, OffsetDateTime startOfPeriod, OffsetDateTime endOfPeriod) {
+    public ExtruderTelemetryReportDTO getTelemetryReportByPeriodDirectly(String token, OffsetDateTime startOfPeriod, OffsetDateTime endOfPeriod) {
         Extruder device = Optional.of(extruderRepository.findByToken(token))
                 .orElseThrow(() -> new DeviceIsNotFoundException(token));
         List<ExtruderTelemetry> telemetryList = extruderTelemetryRepository
@@ -60,5 +60,11 @@ public class ExtruderTelemetryReportService {
         ExtruderTelemetryReport report = extruderReportMetricsCalculator
                 .computeReportMetricsHourly(telemetryList, startOfPeriod, endOfPeriod, device.getCircumference());
         return mapper.fromEntityToDTO(report);
+    }
+
+    public void getTelemetryReportByPeriod(String token, OffsetDateTime from, OffsetDateTime to) {
+        Extruder device = Optional.of(extruderRepository.findByToken(token))
+                .orElseThrow(() -> new DeviceIsNotFoundException(token));
+        List<com.factory.control.domain.entities.ExtruderTelemetryReport> reports = repository.findReportsInPeriod(device.getId(), from, to);
     }
 }
