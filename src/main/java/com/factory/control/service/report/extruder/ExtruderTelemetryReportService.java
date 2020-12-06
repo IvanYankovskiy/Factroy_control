@@ -66,5 +66,6 @@ public class ExtruderTelemetryReportService {
         Extruder device = Optional.of(extruderRepository.findByToken(token))
                 .orElseThrow(() -> new DeviceIsNotFoundException(token));
         List<com.factory.control.domain.entities.ExtruderTelemetryReport> reports = repository.findReportsInPeriod(device.getId(), from, to);
+
     }
 }

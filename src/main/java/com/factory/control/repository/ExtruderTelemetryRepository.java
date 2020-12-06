@@ -2,7 +2,6 @@ package com.factory.control.repository;
 
 import com.factory.control.domain.entities.ExtruderTelemetry;
 import com.factory.control.domain.entities.device.Device;
-import com.factory.control.domain.entities.device.Extruder;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
@@ -21,7 +20,7 @@ public interface ExtruderTelemetryRepository extends JpaRepository<ExtruderTelem
             @Param("from") OffsetDateTime startDateTime,
             @Param("to") OffsetDateTime endDateTime);
 
-    @Query("select distinct(et.device) from ExtruderTelemetry et where et.time >= :from and et.time < :to et.time")
+    @Query("select distinct(et.device) from ExtruderTelemetry et where et.time >= :from and et.time < :to ")
     List<Device> selectDistinctDevicesForPeriod(OffsetDateTime from, OffsetDateTime to);
 
 }
