@@ -1,6 +1,6 @@
 package com.factory.control.controller.report.extruder;
 
-import com.factory.control.controller.dto.report.extruder.ExtruderTelemetryReportDTO;
+import com.factory.control.controller.dto.report.extruder.ExtruderTelemetryReportTotalDTO;
 import com.factory.control.service.report.extruder.ExtruderTelemetryReportService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -25,22 +25,22 @@ public class ExtruderTelemetryReportController {
     }
 
     @GetMapping("extruder/{token}/report/lasthour")
-    public ExtruderTelemetryReportDTO getLastHourPerformance(@PathVariable String token) {
+    public ExtruderTelemetryReportTotalDTO getLastHourPerformance(@PathVariable String token) {
         return service.getTelemetryReportForLastDuration(token, ofHours(1));
     }
 
     @GetMapping("extruder/{token}/report/last12hours")
-    public ExtruderTelemetryReportDTO getLast12HoursPerformance(@PathVariable String token) {
+    public ExtruderTelemetryReportTotalDTO getLast12HoursPerformance(@PathVariable String token) {
         return service.getTelemetryReportForLastDuration(token, ofHours(12));
     }
 
     @GetMapping("extruder/{token}/report/lastweek")
-    public ExtruderTelemetryReportDTO getLastWeekPerformance(@PathVariable String token) {
+    public ExtruderTelemetryReportTotalDTO getLastWeekPerformance(@PathVariable String token) {
         return service.getTelemetryReportForLastDuration(token, Duration.ofDays(7));
     }
 
     @GetMapping("extruder/{token}/report/lastmonth")
-    public ExtruderTelemetryReportDTO getLastMonthPerformance(@PathVariable String token) {
+    public ExtruderTelemetryReportTotalDTO getLastMonthPerformance(@PathVariable String token) {
         LocalDate today = now();
         return service.getTelemetryReportForLastDuration(token, between(today.withDayOfMonth(1), today.plusDays(1)));
     }

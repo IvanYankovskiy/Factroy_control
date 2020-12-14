@@ -1,44 +1,20 @@
 package com.factory.control.service.report.extruder;
 
-import com.factory.control.domain.bo.ExtruderTelemetryReport;
 import com.factory.control.domain.entities.ExtruderTelemetry;
+import com.factory.control.domain.entities.ExtruderTelemetryReport;
 import com.factory.control.domain.entities.device.Extruder;
 import org.springframework.stereotype.Component;
 
 import java.math.BigDecimal;
 import java.math.RoundingMode;
-import java.time.OffsetDateTime;
 import java.util.List;
 
 @Component
 public class ExtruderReportMetricsCalculator {
 
     protected ExtruderTelemetryReport computeReportMetricsHourly(List<ExtruderTelemetry> telemetry,
-                                                                 OffsetDateTime startOfPeriod, OffsetDateTime endOfPeriod,
-                                                                 BigDecimal circumference) {
+                                                                 Extruder device) {
         ExtruderTelemetryReport report = new ExtruderTelemetryReport();
-        report.setStartOfPeriod(startOfPeriod);
-        report.setEndOfPeriod(endOfPeriod);
-        BigDecimal summarizedLength = BigDecimal.valueOf(0.00);
-        BigDecimal summarizedWeight = BigDecimal.valueOf(0.00);
-        for (ExtruderTelemetry tm : telemetry) {
-            BigDecimal bdCounter = BigDecimal.valueOf(tm.getCounter());
-            BigDecimal instantLength = circumference.multiply(bdCounter);
-            BigDecimal instantVolume = tm.getDiameter()
-                    .multiply(tm.getDiameter()).multiply(tm.getDensity())
-                    .multiply(instantLength)
-                    .divide(BigDecimal.valueOf(4), RoundingMode.HALF_UP);
-            summarizedLength = summarizedLength.add(instantLength);
-            summarizedWeight = summarizedWeight.add(instantVolume);
-        }
-        report.setLengthPerformance(convertMillimetersToMeters(summarizedLength));
-        report.setWeightPerformance(convertToKilograms(summarizedWeight));
-        return report;
-    }
-
-    protected com.factory.control.domain.entities.ExtruderTelemetryReport computeReportMetricsHourly(List<ExtruderTelemetry> telemetry,
-                                                                                                     Extruder device) {
-        com.factory.control.domain.entities.ExtruderTelemetryReport report = new com.factory.control.domain.entities.ExtruderTelemetryReport();
         BigDecimal summarizedLength = BigDecimal.valueOf(0.00);
         BigDecimal summarizedWeight = BigDecimal.valueOf(0.00);
         for (ExtruderTelemetry tm : telemetry) {
