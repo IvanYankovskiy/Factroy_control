@@ -7,6 +7,8 @@ import org.springframework.stereotype.Component;
 
 import java.math.BigDecimal;
 import java.math.RoundingMode;
+import java.time.OffsetDateTime;
+import java.time.temporal.ChronoUnit;
 import java.util.List;
 
 @Component
@@ -29,7 +31,11 @@ public class ExtruderReportMetricsCalculator {
         }
         report.setLength(convertMillimetersToMeters(summarizedLength));
         report.setWeight(convertToKilograms(summarizedWeight));
-        report.setTime(telemetry.get(telemetry.size() - 1).getTime());
+        if (telemetry.isEmpty()) {
+            report.setTime(OffsetDateTime.now().truncatedTo(ChronoUnit.HOURS));
+        } else {
+            report.setTime(telemetry.get(telemetry.size() - 1).getTime());
+        }
         report.setDevice(device);
         return report;
     }
