@@ -34,7 +34,7 @@ public class ExtruderTelemetryReportService {
     private final ExtruderFinalReportGenerator extruderFinalReportGenerator;
 
     public ExtruderTelemetryReportTotalDTO getTelemetryReportForLastDuration(String token, Duration period) {
-        OffsetDateTime endOfPeriod = OffsetDateTime.now();
+        OffsetDateTime endOfPeriod = OffsetDateTime.now().plusHours(1);
         OffsetDateTime startOfPeriod = endOfPeriod.minus(period);
         return getTelemetryReportByPeriodDirectly(token, startOfPeriod, endOfPeriod);
     }
