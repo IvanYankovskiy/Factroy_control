@@ -9,8 +9,8 @@ import org.springframework.web.bind.annotation.RestController;
 
 import java.time.Duration;
 import java.time.LocalDate;
+import java.time.Period;
 
-import static java.time.Duration.between;
 import static java.time.Duration.ofHours;
 import static java.time.LocalDate.now;
 
@@ -42,7 +42,7 @@ public class ExtruderTelemetryReportController {
     @GetMapping("extruder/{token}/report/lastmonth")
     public ExtruderTelemetryReportTotalDTO getLastMonthPerformance(@PathVariable String token) {
         LocalDate today = now();
-        return service.getTelemetryReportForLastDuration(token, between(today.withDayOfMonth(1), today.plusDays(1)));
+        return service.getTelemetryReportForLastPeriod(token, Period.between(today.withDayOfMonth(1), today.plusDays(1)));
     }
 
 }

@@ -25,10 +25,10 @@ public class ExtruderTelemetryReport {
     private Device device;
 
     @Column(name = "length", nullable = false)
-    BigDecimal length;
+    private BigDecimal length;
 
     @Column(name = "weight", nullable = false)
-    BigDecimal weight;
+    private BigDecimal weight;
 
     @Column(name = "time", nullable = false)
     private OffsetDateTime time;

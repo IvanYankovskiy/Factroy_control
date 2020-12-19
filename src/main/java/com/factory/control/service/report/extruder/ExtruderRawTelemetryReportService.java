@@ -14,6 +14,7 @@ import org.springframework.stereotype.Service;
 
 import java.time.Duration;
 import java.time.OffsetDateTime;
+import java.time.Period;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -39,6 +40,12 @@ public class ExtruderRawTelemetryReportService {
     public ExtruderRawTelemetryReportDTO getRawTelemetryReportForLastDuration(String token, Duration duration) {
         OffsetDateTime endOfPeriod = OffsetDateTime.now();
         OffsetDateTime startOfPeriod = endOfPeriod.minus(duration);
+        return getRawTelemetryReportByPeriod(token, startOfPeriod, endOfPeriod);
+    }
+
+    public ExtruderRawTelemetryReportDTO getRawTelemetryReportForLastPeriod(String token, Period period) {
+        OffsetDateTime endOfPeriod = OffsetDateTime.now();
+        OffsetDateTime startOfPeriod = endOfPeriod.minus(period);
         return getRawTelemetryReportByPeriod(token, startOfPeriod, endOfPeriod);
     }
 

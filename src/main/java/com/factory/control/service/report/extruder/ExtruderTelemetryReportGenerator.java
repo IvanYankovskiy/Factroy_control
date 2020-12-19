@@ -40,23 +40,12 @@ public class ExtruderTelemetryReportGenerator {
         }
     }
 
-    //please, read https://www.baeldung.com/spring-data-jpa-pagination-sorting
-    //then find official docs and read carefully
-    //then explore spring batch and also compare approach
-    /**
-     * Generates list of complete reports divided hourly
-     * 
-     * @param device
-     * @param from
-     * @param to
-     * @return
-     */
     public List<ExtruderTelemetryReport> generateReportRecordsForDevice(Extruder device, OffsetDateTime from, OffsetDateTime to) {
         List<ExtruderTelemetry> rawTelemetry = telemetryRepository.findTelemetriesInPeriod(device.getId(), from, to)
                 .orElse(new ArrayList<>());
         long hoursInPeriod = Duration.between(from, to).toHours();
         int currentRecord = 0;
-        List<com.factory.control.domain.entities.ExtruderTelemetryReport> reports = new ArrayList<>();
+        ArrayList<ExtruderTelemetryReport> reports = new ArrayList<>();
         for (int currentPeriod = 0; currentPeriod < hoursInPeriod; currentPeriod++) {
             OffsetDateTime currentFrom = from.plusHours(currentPeriod);
             OffsetDateTime currentTo = currentFrom.plusHours(1);

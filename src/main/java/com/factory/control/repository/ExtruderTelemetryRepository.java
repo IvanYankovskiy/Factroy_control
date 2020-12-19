@@ -21,6 +21,8 @@ public interface ExtruderTelemetryRepository extends JpaRepository<ExtruderTelem
             @Param("to") OffsetDateTime endDateTime);
 
     @Query("select distinct(et.device) from ExtruderTelemetry et where et.time >= :from and et.time < :to ")
-    List<Device> selectDistinctDevicesForPeriod(OffsetDateTime from, OffsetDateTime to);
+    List<Device> selectDistinctDevicesForPeriod(
+            @Param("from") OffsetDateTime from,
+            @Param("to")OffsetDateTime to);
 
 }

@@ -13,28 +13,32 @@ import org.springframework.stereotype.Service;
 
 import java.time.Duration;
 import java.time.OffsetDateTime;
-import java.time.temporal.ChronoUnit;
+import java.time.Period;
 import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Optional;
+
+import static java.time.temporal.ChronoUnit.HOURS;
 
 @Service
 @RequiredArgsConstructor
 public class ExtruderTelemetryReportService {
 
     private final ExtruderTelemetryReportRepository repository;
-
     private final ExtruderTelemetryRepository extruderTelemetryRepository;
-
     private final ExtruderRepository extruderRepository;
-
     private final ExtruderReportMetricsCalculator extruderReportMetricsCalculator;
-
     private final ExtruderFinalReportGenerator extruderFinalReportGenerator;
 
     public ExtruderTelemetryReportTotalDTO getTelemetryReportForLastDuration(String token, Duration period) {
-        OffsetDateTime endOfPeriod = OffsetDateTime.now().plusHours(1);
+        OffsetDateTime endOfPeriod = OffsetDateTime.now().truncatedTo(HOURS).plusHours(1);
+        OffsetDateTime startOfPeriod = endOfPeriod.minus(period);
+        return getTelemetryReportByPeriodDirectly(token, startOfPeriod, endOfPeriod);
+    }
+
+    public ExtruderTelemetryReportTotalDTO getTelemetryReportForLastPeriod(String token, Period period) {
+        OffsetDateTime endOfPeriod = OffsetDateTime.now().truncatedTo(HOURS).plusHours(1);
         OffsetDateTime startOfPeriod = endOfPeriod.minus(period);
         return getTelemetryReportByPeriodDirectly(token, startOfPeriod, endOfPeriod);
     }
@@ -42,15 +46,19 @@ public class ExtruderTelemetryReportService {
     public ExtruderTelemetryReportTotalDTO getTelemetryReportByPeriodDirectly(String token, OffsetDateTime startOfPeriod, OffsetDateTime endOfPeriod) {
         Extruder device = Optional.of(extruderRepository.findByToken(token))
                 .orElseThrow(() -> new DeviceIsNotFoundException(token));
-        OffsetDateTime startOfCurrentHour = endOfPeriod.truncatedTo(ChronoUnit.HOURS);
+        OffsetDateTime startOfCurrentHour = endOfPeriod.truncatedTo(HOURS).minusHours(1);
 
         List<ExtruderTelemetry> telemetryList = extruderTelemetryRepository
-                .findTelemetriesInPeriod(device.getId(), startOfCurrentHour, startOfCurrentHour.plusHours(1))
+                .findTelemetriesInPeriod(device.getId(), startOfCurrentHour, endOfPeriod)
                 .orElse(new ArrayList<>());
         ExtruderTelemetryReport currentHourReport = extruderReportMetricsCalculator
                 .computeReportMetricsHourly(telemetryList, device);
 
-        LinkedList<ExtruderTelemetryReport> computedReports = repository.findReportsInPeriod(device.getId(), startOfPeriod, endOfPeriod);
+        LinkedList<ExtruderTelemetryReport> computedReports = repository.findReportsInPeriod(
+                device.getId(),
+                startOfPeriod,
+                endOfPeriod
+        );
         computedReports.addFirst(currentHourReport);
 
         return extruderFinalReportGenerator.generateReport(computedReports, startOfPeriod, endOfPeriod);

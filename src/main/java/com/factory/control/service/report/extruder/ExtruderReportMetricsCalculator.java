@@ -22,12 +22,13 @@ public class ExtruderReportMetricsCalculator {
         for (ExtruderTelemetry tm : telemetry) {
             BigDecimal bdCounter = BigDecimal.valueOf(tm.getCounter());
             BigDecimal instantLength = device.getCircumference().multiply(bdCounter);
-            BigDecimal instantVolume = tm.getDiameter()
+            BigDecimal instantWeight = tm.getDiameter()
                     .multiply(tm.getDiameter()).multiply(tm.getDensity())
                     .multiply(instantLength)
+                    .multiply(BigDecimal.valueOf(Math.PI))
                     .divide(BigDecimal.valueOf(4), RoundingMode.HALF_UP);
             summarizedLength = summarizedLength.add(instantLength);
-            summarizedWeight = summarizedWeight.add(instantVolume);
+            summarizedWeight = summarizedWeight.add(instantWeight);
         }
         report.setLength(convertMillimetersToMeters(summarizedLength));
         report.setWeight(convertToKilograms(summarizedWeight));
@@ -46,6 +47,6 @@ public class ExtruderReportMetricsCalculator {
     }
 
     private BigDecimal convertToKilograms(BigDecimal volumeWithCubicMillimeters) {
-        return volumeWithCubicMillimeters.divide(BigDecimal.valueOf(1000000000000L), RoundingMode.HALF_UP);
+        return volumeWithCubicMillimeters.divide(BigDecimal.valueOf(1000000L), RoundingMode.HALF_UP);
     }
 }
