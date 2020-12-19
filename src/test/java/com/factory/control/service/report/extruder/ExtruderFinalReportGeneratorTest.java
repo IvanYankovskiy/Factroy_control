@@ -63,7 +63,7 @@ class ExtruderFinalReportGeneratorTest {
         report5.setLength(BigDecimal.valueOf(1.0));
         report5.setWeight(BigDecimal.valueOf(10.0));
 
-        return newArrayList(report1, report2, report3, report4, report5);
+        return newArrayList(report5, report4, report3, report2, report1);
     }
 
     private ExtruderTelemetryReportTotalDTO createExpectedReportDto() {
@@ -102,7 +102,7 @@ class ExtruderFinalReportGeneratorTest {
         reportTotalDto.setTotalWeight(BigDecimal.valueOf(40.0));
         reportTotalDto.setFrom(of(2020, 10, 21, 23, 0, 0,0, UTC));
         reportTotalDto.setTo(of(2020, 10, 22, 4, 0, 0,0, UTC));
-        reportTotalDto.setDetails(newArrayList(reportDto1, reportDto2, reportDto3, reportDto4, reportDto5));
+        reportTotalDto.setDetails(newArrayList(reportDto5, reportDto4, reportDto3, reportDto2, reportDto1));
         return reportTotalDto;
     }
 
