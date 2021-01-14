@@ -8,6 +8,11 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.time.Duration;
+import java.time.LocalDate;
+import java.time.Period;
+
+import static java.time.Duration.ofDays;
+import static java.time.LocalDate.now;
 
 @RestController
 public class ExtruderRawTelemetryReportController {
@@ -31,12 +36,13 @@ public class ExtruderRawTelemetryReportController {
 
     @GetMapping("extruder/{token}/report/raw/lastweek")
     public ExtruderRawTelemetryReportDTO getLastWeekRawTelemetry(@PathVariable String token) {
-        return service.getRawTelemetryReportForLastDuration(token, Duration.ofDays(7));
+        return service.getRawTelemetryReportForLastDuration(token, ofDays(7));
     }
 
     @GetMapping("extruder/{token}/report/raw/lastmonth")
     public ExtruderRawTelemetryReportDTO getLastMonthRawTelemetry(@PathVariable String token) {
-        return service.getRawTelemetryReportForLastDuration(token, Duration.ofDays(30));
+        LocalDate today = now();
+        return service.getRawTelemetryReportForLastPeriod(token, Period.between(today.withDayOfMonth(1), today.plusDays(1)));
     }
     
 }

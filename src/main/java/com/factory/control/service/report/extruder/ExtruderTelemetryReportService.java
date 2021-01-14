@@ -1,106 +1,68 @@
 package com.factory.control.service.report.extruder;
 
-import com.factory.control.controller.dto.report.extruder.ExtruderTelemetryReportDTO;
-import com.factory.control.controller.mapper.ExtruderTelemetryReportMapper;
-import com.factory.control.domain.bo.ExtruderTelemetryReport;
+import com.factory.control.controller.dto.report.extruder.ExtruderTelemetryReportTotalDTO;
 import com.factory.control.domain.entities.ExtruderTelemetry;
+import com.factory.control.domain.entities.ExtruderTelemetryReport;
 import com.factory.control.domain.entities.device.Extruder;
 import com.factory.control.repository.ExtruderTelemetryReportRepository;
+import com.factory.control.repository.ExtruderTelemetryRepository;
 import com.factory.control.repository.device.ExtruderRepository;
 import com.factory.control.service.exception.DeviceIsNotFoundException;
-import org.springframework.beans.factory.annotation.Autowired;
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
-import java.math.BigDecimal;
-import java.math.RoundingMode;
+import java.time.Duration;
 import java.time.OffsetDateTime;
+import java.time.Period;
 import java.util.ArrayList;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.Optional;
 
+import static java.time.temporal.ChronoUnit.HOURS;
+
 @Service
+@RequiredArgsConstructor
 public class ExtruderTelemetryReportService {
 
     private final ExtruderTelemetryReportRepository repository;
-
+    private final ExtruderTelemetryRepository extruderTelemetryRepository;
     private final ExtruderRepository extruderRepository;
+    private final ExtruderReportMetricsCalculator extruderReportMetricsCalculator;
+    private final ExtruderFinalReportGenerator extruderFinalReportGenerator;
 
-    private final ExtruderTelemetryReportMapper mapper;
-
-    @Autowired
-    public ExtruderTelemetryReportService(ExtruderTelemetryReportRepository repository,
-                                          ExtruderRepository extruderRepository,
-                                          ExtruderTelemetryReportMapper extruderTelemetryReportMapper) {
-        this.repository = repository;
-        this.extruderRepository = extruderRepository;
-        this.mapper = extruderTelemetryReportMapper;
+    public ExtruderTelemetryReportTotalDTO getTelemetryReportForLastDuration(String token, Duration period) {
+        OffsetDateTime endOfPeriod = OffsetDateTime.now().truncatedTo(HOURS).plusHours(1);
+        OffsetDateTime startOfPeriod = endOfPeriod.minus(period);
+        return getTelemetryReportByPeriodDirectly(token, startOfPeriod, endOfPeriod);
     }
 
-    public ExtruderTelemetryReportDTO getTelemetryReportForLastHour(String token) {
-        OffsetDateTime endOfPeriod = OffsetDateTime.now();
-        OffsetDateTime startOfPeriod = endOfPeriod.minusHours(1);
-        return getTelemetryReportByPeriod(token, startOfPeriod, endOfPeriod);
+    public ExtruderTelemetryReportTotalDTO getTelemetryReportForLastPeriod(String token, Period period) {
+        OffsetDateTime endOfPeriod = OffsetDateTime.now().truncatedTo(HOURS).plusHours(1);
+        OffsetDateTime startOfPeriod = endOfPeriod.minus(period);
+        return getTelemetryReportByPeriodDirectly(token, startOfPeriod, endOfPeriod);
     }
 
-    public ExtruderTelemetryReportDTO getTelemetryReportForLast12Hours(String token) {
-        OffsetDateTime endOfPeriod = OffsetDateTime.now();
-        OffsetDateTime startOfPeriod = endOfPeriod.minusHours(12);
-        return getTelemetryReportByPeriod(token, startOfPeriod, endOfPeriod);
-    }
-
-    public ExtruderTelemetryReportDTO getTelemetryReportForLastWeek(String token) {
-        OffsetDateTime endOfPeriod = OffsetDateTime.now();
-        OffsetDateTime startOfPeriod = endOfPeriod.minusWeeks(1);
-        return getTelemetryReportByPeriod(token, startOfPeriod, endOfPeriod);
-    }
-
-    public ExtruderTelemetryReportDTO getTelemetryReportForLastMonth(String token) {
-        OffsetDateTime endOfPeriod = OffsetDateTime.now();
-        OffsetDateTime startOfPeriod = endOfPeriod.minusMonths(1);
-        return getTelemetryReportByPeriod(token, startOfPeriod, endOfPeriod);
-    }
-
-    public ExtruderTelemetryReportDTO getTelemetryReportByPeriod(String token, OffsetDateTime startOfPeriod, OffsetDateTime endOfPeriod) {
+    public ExtruderTelemetryReportTotalDTO getTelemetryReportByPeriodDirectly(String token, OffsetDateTime startOfPeriod, OffsetDateTime endOfPeriod) {
         Extruder device = Optional.of(extruderRepository.findByToken(token))
                 .orElseThrow(() -> new DeviceIsNotFoundException(token));
-        List<ExtruderTelemetry> telemetryList = repository
-                .findExtruderTelemetriesByDeviceIdIsAndTimeAfterAndTimeBeforeOrderByTime(device, startOfPeriod, endOfPeriod)
+        OffsetDateTime startOfCurrentHour = endOfPeriod.truncatedTo(HOURS).minusHours(1);
+
+        List<ExtruderTelemetry> telemetryList = extruderTelemetryRepository
+                .findTelemetriesInPeriod(device.getId(), startOfCurrentHour, endOfPeriod)
                 .orElse(new ArrayList<>());
+        ExtruderTelemetryReport currentHourReport = extruderReportMetricsCalculator
+                .computeReportMetricsHourly(telemetryList, device);
 
-        ExtruderTelemetryReport report = computeReportMetrics(telemetryList, startOfPeriod, endOfPeriod, device.getCircumference());
-        return mapper.fromEntityToDTO(report);
+        LinkedList<ExtruderTelemetryReport> computedReports = repository.findReportsInPeriod(
+                device.getId(),
+                startOfPeriod,
+                endOfPeriod
+        );
+        computedReports.addFirst(currentHourReport);
+
+        ExtruderTelemetryReportTotalDTO finalReport = extruderFinalReportGenerator.generateReport(computedReports, startOfPeriod, endOfPeriod);
+        finalReport.setExtruderName(device.getName());
+        return finalReport;
     }
-
-    protected ExtruderTelemetryReport computeReportMetrics(List<ExtruderTelemetry> telemetry,
-                                                         OffsetDateTime startOfPeriod, OffsetDateTime endOfPeriod,
-                                                         BigDecimal circumference) {
-        ExtruderTelemetryReport report = new ExtruderTelemetryReport();
-        report.setStartOfPeriod(startOfPeriod);
-        report.setEndOfPeriod(endOfPeriod);
-        BigDecimal summarizedLength = BigDecimal.valueOf(0.00);
-        BigDecimal summarizedWeight = BigDecimal.valueOf(0.00);
-        for (ExtruderTelemetry tm : telemetry) {
-            BigDecimal bdCounter = BigDecimal.valueOf(tm.getCounter());
-            BigDecimal instantLength = circumference.multiply(bdCounter);
-            BigDecimal instantVolume = tm.getDiameter()
-                    .multiply(tm.getDiameter()).multiply(tm.getDensity())
-                    .multiply(instantLength)
-                    .divide(BigDecimal.valueOf(4), RoundingMode.HALF_UP);
-            summarizedLength = summarizedLength.add(instantLength);
-            summarizedWeight = summarizedWeight.add(instantVolume);
-        }
-        report.setLengthPerformance(convertMillimetersToMeters(summarizedLength));
-        report.setWeightPerformance(convertCubicMillimetersToCubicMeters(summarizedWeight));
-        return report;
-    }
-
-
-    private BigDecimal convertMillimetersToMeters(BigDecimal lengthInMeters) {
-        return lengthInMeters.divide(BigDecimal.valueOf(1000), RoundingMode.HALF_UP);
-    }
-
-    private BigDecimal convertCubicMillimetersToCubicMeters(BigDecimal volumeWithCubicMillimeters) {
-        return volumeWithCubicMillimeters.divide(BigDecimal.valueOf(1000000000000L), RoundingMode.HALF_UP);
-    }
-
 }

@@ -6,7 +6,7 @@ import com.factory.control.controller.dto.report.extruder.ExtruderRawTelemetryRe
 import com.factory.control.controller.mapper.ExtruderMapper;
 import com.factory.control.domain.entities.ExtruderTelemetry;
 import com.factory.control.domain.entities.device.Extruder;
-import com.factory.control.repository.ExtruderTelemetryReportRepository;
+import com.factory.control.repository.ExtruderTelemetryRepository;
 import com.factory.control.repository.device.ExtruderRepository;
 import com.factory.control.service.exception.DeviceIsNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -14,6 +14,7 @@ import org.springframework.stereotype.Service;
 
 import java.time.Duration;
 import java.time.OffsetDateTime;
+import java.time.Period;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -22,14 +23,14 @@ import java.util.stream.Collectors;
 @Service
 public class ExtruderRawTelemetryReportService {
 
-    private final ExtruderTelemetryReportRepository repository;
+    private final ExtruderTelemetryRepository repository;
 
     private final ExtruderRepository extruderRepository;
 
     private final ExtruderMapper extruderMapper;
 
     @Autowired
-    public ExtruderRawTelemetryReportService(ExtruderTelemetryReportRepository repository, ExtruderRepository extruderRepository,
+    public ExtruderRawTelemetryReportService(ExtruderTelemetryRepository repository, ExtruderRepository extruderRepository,
                                              ExtruderMapper extruderMapper) {
         this.repository = repository;
         this.extruderRepository = extruderRepository;
@@ -42,11 +43,17 @@ public class ExtruderRawTelemetryReportService {
         return getRawTelemetryReportByPeriod(token, startOfPeriod, endOfPeriod);
     }
 
+    public ExtruderRawTelemetryReportDTO getRawTelemetryReportForLastPeriod(String token, Period period) {
+        OffsetDateTime endOfPeriod = OffsetDateTime.now();
+        OffsetDateTime startOfPeriod = endOfPeriod.minus(period);
+        return getRawTelemetryReportByPeriod(token, startOfPeriod, endOfPeriod);
+    }
+
     protected ExtruderRawTelemetryReportDTO getRawTelemetryReportByPeriod(String token, OffsetDateTime startOfPeriod, OffsetDateTime endOfPeriod) {
         Extruder device = Optional.of(extruderRepository.findByToken(token))
                 .orElseThrow(() -> new DeviceIsNotFoundException(token));
         List<ExtruderTelemetry> telemetryList = repository
-                .findExtruderTelemetriesByDeviceIdIsAndTimeAfterAndTimeBeforeOrderByTime(device, startOfPeriod, endOfPeriod)
+                .findTelemetriesInPeriod(device.getId(), startOfPeriod, endOfPeriod)
                 .orElse(new ArrayList<>());
 
         ExtruderRawTelemetryReportDTO report = new ExtruderRawTelemetryReportDTO();
