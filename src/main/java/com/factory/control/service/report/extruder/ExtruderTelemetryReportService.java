@@ -61,6 +61,8 @@ public class ExtruderTelemetryReportService {
         );
         computedReports.addFirst(currentHourReport);
 
-        return extruderFinalReportGenerator.generateReport(computedReports, startOfPeriod, endOfPeriod);
+        ExtruderTelemetryReportTotalDTO finalReport = extruderFinalReportGenerator.generateReport(computedReports, startOfPeriod, endOfPeriod);
+        finalReport.setExtruderName(device.getName());
+        return finalReport;
     }
 }

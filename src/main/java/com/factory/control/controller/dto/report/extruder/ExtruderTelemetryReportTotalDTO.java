@@ -10,6 +10,7 @@ import java.util.List;
 
 @Data
 public class ExtruderTelemetryReportTotalDTO {
+    String extruderName;
     BigDecimal totalLength = BigDecimal.valueOf(0.0);
     BigDecimal totalWeight = BigDecimal.valueOf(0.0);
 
