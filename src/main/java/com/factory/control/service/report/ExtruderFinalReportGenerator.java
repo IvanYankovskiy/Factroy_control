@@ -1,13 +1,16 @@
-package com.factory.control.service.report.extruder;
+package com.factory.control.service.report;
 
-import com.factory.control.controller.dto.report.extruder.ExtruderTelemetryReportDTO;
-import com.factory.control.controller.dto.report.extruder.ExtruderTelemetryReportTotalDTO;
+import com.factory.control.controller.dto.ExtruderTelemetryReportDTO;
+import com.factory.control.controller.dto.ExtruderTelemetryReportTotalDTO;
 import com.factory.control.domain.entities.ExtruderTelemetryReport;
 import org.springframework.stereotype.Service;
 
 import java.time.OffsetDateTime;
 import java.time.temporal.ChronoUnit;
-import java.util.*;
+import java.util.Comparator;
+import java.util.LinkedHashMap;
+import java.util.List;
+import java.util.Map;
 import java.util.stream.Collectors;
 
 @Service

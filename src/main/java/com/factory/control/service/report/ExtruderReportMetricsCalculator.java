@@ -1,8 +1,8 @@
-package com.factory.control.service.report.extruder;
+package com.factory.control.service.report;
 
+import com.factory.control.domain.entities.Extruder;
 import com.factory.control.domain.entities.ExtruderTelemetry;
 import com.factory.control.domain.entities.ExtruderTelemetryReport;
-import com.factory.control.domain.entities.device.Extruder;
 import org.springframework.stereotype.Component;
 
 import java.math.BigDecimal;

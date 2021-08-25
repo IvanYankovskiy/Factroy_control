@@ -1,6 +1,5 @@
 package com.factory.control.domain.entities;
 
-import com.factory.control.domain.entities.device.Device;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.experimental.Accessors;
@@ -31,10 +30,10 @@ public class ExtruderTelemetry {
     @Column(name = "counter", nullable = false)
     private Integer counter;
 
-    @Column(name = "density", nullable = false, precision = 0)
+    @Column(name = "density", nullable = false)
     private BigDecimal density;
 
-    @Column(name = "diameter", nullable = false, precision = 0)
+    @Column(name = "diameter", nullable = false)
     private BigDecimal diameter;
 
     @Column(name = "time", nullable = false)

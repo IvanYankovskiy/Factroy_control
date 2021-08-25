@@ -1,9 +1,9 @@
-package com.factory.control.controller.report.extruder;
+package com.factory.control.controller;
 
-import com.factory.control.controller.dto.report.extruder.ExtruderTelemetryReportTotalDTO;
+import com.factory.control.controller.dto.ExtruderTelemetryReportTotalDTO;
 import com.factory.control.domain.bo.InMemoryFileContainer;
-import com.factory.control.service.report.extruder.ExtruderCsvTelemetryReportService;
-import com.factory.control.service.report.extruder.ExtruderTelemetryReportService;
+import com.factory.control.service.report.ExtruderCsvTelemetryReportService;
+import com.factory.control.service.report.ExtruderTelemetryReportService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;

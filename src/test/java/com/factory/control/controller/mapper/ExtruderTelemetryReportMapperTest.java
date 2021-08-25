@@ -1,6 +1,6 @@
 package com.factory.control.controller.mapper;
 
-import com.factory.control.controller.dto.report.extruder.ExtruderTelemetryReportDTO;
+import com.factory.control.controller.dto.ExtruderTelemetryReportDTO;
 import com.factory.control.domain.bo.ExtruderTelemetryReport;
 import org.junit.jupiter.api.Test;
 import org.mapstruct.factory.Mappers;
@@ -8,7 +8,7 @@ import org.mapstruct.factory.Mappers;
 import java.math.BigDecimal;
 import java.time.OffsetDateTime;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
 
 class ExtruderTelemetryReportMapperTest {
 

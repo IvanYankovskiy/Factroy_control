@@ -1,8 +1,8 @@
-package com.factory.control.service.report.extruder;
+package com.factory.control.service.report;
 
+import com.factory.control.domain.entities.Extruder;
 import com.factory.control.domain.entities.ExtruderTelemetry;
 import com.factory.control.domain.entities.ExtruderTelemetryReport;
-import com.factory.control.domain.entities.device.Extruder;
 import com.factory.control.repository.ExtruderTelemetryReportRepository;
 import com.factory.control.repository.ExtruderTelemetryRepository;
 import org.assertj.core.util.Lists;

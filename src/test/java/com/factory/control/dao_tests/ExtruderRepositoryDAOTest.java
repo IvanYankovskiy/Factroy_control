@@ -1,9 +1,9 @@
 package com.factory.control.dao_tests;
 
 import com.factory.control.configuration.OnlyDataJpaTest;
-import com.factory.control.domain.entities.device.DeviceType;
-import com.factory.control.domain.entities.device.Extruder;
-import com.factory.control.repository.device.ExtruderRepository;
+import com.factory.control.domain.entities.DeviceType;
+import com.factory.control.domain.entities.Extruder;
+import com.factory.control.repository.ExtruderRepository;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;

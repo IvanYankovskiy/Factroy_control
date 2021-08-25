@@ -1,7 +1,7 @@
 package com.factory.control.service;
 
-import com.factory.control.domain.entities.device.Device;
-import com.factory.control.repository.device.DeviceBaseRepository;
+import com.factory.control.domain.entities.Device;
+import com.factory.control.repository.DeviceBaseRepository;
 
 import java.io.Serializable;
 import java.util.List;

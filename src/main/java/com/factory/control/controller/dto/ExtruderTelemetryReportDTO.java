@@ -1,4 +1,4 @@
-package com.factory.control.controller.dto.report.extruder;
+package com.factory.control.controller.dto;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonProperty;

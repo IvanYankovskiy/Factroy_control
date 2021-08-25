@@ -1,7 +1,7 @@
 package com.factory.control.controller.mapper;
 
 import com.factory.control.controller.dto.ExtruderDTO;
-import com.factory.control.domain.entities.device.Extruder;
+import com.factory.control.domain.entities.Extruder;
 import org.mapstruct.*;
 
 import java.util.ArrayList;

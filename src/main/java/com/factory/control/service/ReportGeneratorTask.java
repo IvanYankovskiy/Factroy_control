@@ -1,6 +1,6 @@
 package com.factory.control.service;
 
-import com.factory.control.service.report.extruder.ExtruderTelemetryReportGenerator;
+import com.factory.control.service.report.ExtruderTelemetryReportGenerator;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.scheduling.annotation.Scheduled;

@@ -1,7 +1,7 @@
-package com.factory.control.service.report.extruder;
+package com.factory.control.service.report;
 
-import com.factory.control.controller.dto.report.extruder.ExtruderTelemetryReportDTO;
-import com.factory.control.controller.dto.report.extruder.ExtruderTelemetryReportTotalDTO;
+import com.factory.control.controller.dto.ExtruderTelemetryReportDTO;
+import com.factory.control.controller.dto.ExtruderTelemetryReportTotalDTO;
 import com.factory.control.domain.bo.InMemoryFileContainer;
 import com.factory.control.service.exception.ReportCreationException;
 import lombok.RequiredArgsConstructor;

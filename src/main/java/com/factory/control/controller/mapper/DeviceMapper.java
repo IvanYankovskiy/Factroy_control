@@ -1,8 +1,11 @@
 package com.factory.control.controller.mapper;
 
 import com.factory.control.controller.dto.DeviceDTO;
-import com.factory.control.domain.entities.device.Device;
-import org.mapstruct.*;
+import com.factory.control.domain.entities.Device;
+import org.mapstruct.InjectionStrategy;
+import org.mapstruct.Mapper;
+import org.mapstruct.Mapping;
+import org.mapstruct.ReportingPolicy;
 
 import javax.validation.Validator;
 import java.util.ArrayList;

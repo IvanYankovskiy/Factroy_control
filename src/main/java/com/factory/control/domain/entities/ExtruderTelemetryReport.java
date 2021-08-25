@@ -1,6 +1,5 @@
 package com.factory.control.domain.entities;
 
-import com.factory.control.domain.entities.device.Device;
 import lombok.Getter;
 import lombok.Setter;
 

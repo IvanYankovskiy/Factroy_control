@@ -1,9 +1,9 @@
-package com.factory.control.service.report.extruder;
+package com.factory.control.service.report;
 
+import com.factory.control.domain.entities.Device;
+import com.factory.control.domain.entities.Extruder;
 import com.factory.control.domain.entities.ExtruderTelemetry;
 import com.factory.control.domain.entities.ExtruderTelemetryReport;
-import com.factory.control.domain.entities.device.Device;
-import com.factory.control.domain.entities.device.Extruder;
 import com.factory.control.repository.ExtruderTelemetryReportRepository;
 import com.factory.control.repository.ExtruderTelemetryRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -45,7 +45,7 @@ public class ExtruderTelemetryReportGenerator {
                 .orElse(new ArrayList<>());
         long hoursInPeriod = Duration.between(from, to).toHours();
         int currentRecord = 0;
-        ArrayList<ExtruderTelemetryReport> reports = new ArrayList<>();
+        List<ExtruderTelemetryReport> reports = new ArrayList<>();
         for (int currentPeriod = 0; currentPeriod < hoursInPeriod; currentPeriod++) {
             OffsetDateTime currentFrom = from.plusHours(currentPeriod);
             OffsetDateTime currentTo = currentFrom.plusHours(1);

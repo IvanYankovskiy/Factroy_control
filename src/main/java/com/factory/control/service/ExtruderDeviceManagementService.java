@@ -2,8 +2,8 @@ package com.factory.control.service;
 
 import com.factory.control.controller.dto.ExtruderDTO;
 import com.factory.control.controller.mapper.ExtruderMapper;
-import com.factory.control.domain.entities.device.DeviceType;
-import com.factory.control.domain.entities.device.Extruder;
+import com.factory.control.domain.entities.DeviceType;
+import com.factory.control.domain.entities.Extruder;
 import com.factory.control.service.exception.DeviceIsNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;

@@ -1,12 +1,12 @@
-package com.factory.control.service.report.extruder;
+package com.factory.control.service.report;
 
-import com.factory.control.controller.dto.report.extruder.ExtruderTelemetryReportTotalDTO;
+import com.factory.control.controller.dto.ExtruderTelemetryReportTotalDTO;
+import com.factory.control.domain.entities.Extruder;
 import com.factory.control.domain.entities.ExtruderTelemetry;
 import com.factory.control.domain.entities.ExtruderTelemetryReport;
-import com.factory.control.domain.entities.device.Extruder;
+import com.factory.control.repository.ExtruderRepository;
 import com.factory.control.repository.ExtruderTelemetryReportRepository;
 import com.factory.control.repository.ExtruderTelemetryRepository;
-import com.factory.control.repository.device.ExtruderRepository;
 import com.factory.control.service.exception.DeviceIsNotFoundException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;

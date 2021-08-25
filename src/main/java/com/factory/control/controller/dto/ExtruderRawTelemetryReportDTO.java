@@ -1,6 +1,5 @@
-package com.factory.control.controller.dto.report.extruder;
+package com.factory.control.controller.dto;
 
-import com.factory.control.controller.dto.ExtruderDTO;
 import lombok.Getter;
 import lombok.Setter;
 
