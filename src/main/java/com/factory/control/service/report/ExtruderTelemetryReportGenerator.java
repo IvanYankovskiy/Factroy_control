@@ -16,6 +16,8 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
+import static java.util.Collections.emptyList;
+
 @Component
 @Transactional
 public class ExtruderTelemetryReportGenerator {
@@ -42,7 +44,7 @@ public class ExtruderTelemetryReportGenerator {
 
     public List<ExtruderTelemetryReport> generateReportRecordsForDevice(Extruder device, OffsetDateTime from, OffsetDateTime to) {
         List<ExtruderTelemetry> rawTelemetry = telemetryRepository.findTelemetriesInPeriod(device.getId(), from, to)
-                .orElse(new ArrayList<>());
+                .orElse(emptyList());
         long hoursInPeriod = Duration.between(from, to).toHours();
         int currentRecord = 0;
         List<ExtruderTelemetryReport> reports = new ArrayList<>();
@@ -54,7 +56,7 @@ public class ExtruderTelemetryReportGenerator {
                     .skip(currentRecord)
                     .filter(telemetry -> currentFrom.isBefore(telemetry.getTime()) && currentTo.isAfter(telemetry.getTime()))
                     .collect(Collectors.toList());
-            currentPeriod += subPeriodTelemetry.size();
+            currentRecord += subPeriodTelemetry.size();
             if (!subPeriodTelemetry.isEmpty()) {
                 reports.add(calculator.computeReportMetricsHourly(subPeriodTelemetry, device));
             }

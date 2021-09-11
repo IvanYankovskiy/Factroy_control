@@ -61,26 +61,35 @@ class ExtruderTelemetryReportGeneratorTest {
         List<ExtruderTelemetryReport> actual = generator.generateReportRecordsForDevice(device, from, to);
 
         // then
-        assertThat(actual.size()).isEqualTo(4);
-        verify(calculator, times(4)).computeReportMetricsHourly(anyList(), eq(device));
+        assertThat(actual.size()).isEqualTo(5);
+        verify(calculator, times(5)).computeReportMetricsHourly(anyList(), eq(device));
         verify(telemetryReportRepository).saveAll(anyList());
         verify(telemetryRepository).deleteAll(rawTelemetry);
     }
 
     private List<ExtruderTelemetry> createRawTelemetry() {
-        ExtruderTelemetry tm1 = new ExtruderTelemetry()
+        // 1 group
+        ExtruderTelemetry tm11 = new ExtruderTelemetry()
                 .setTime(of(2020, 10, 22, 2, 15, 45,0, UTC));
-        ExtruderTelemetry tm2 = new ExtruderTelemetry()
+        ExtruderTelemetry tm12 = new ExtruderTelemetry()
                 .setTime(of(2020, 10, 22, 2, 16, 7,0, UTC));
-        ExtruderTelemetry tm3 = new ExtruderTelemetry()
+        // 2 group
+        ExtruderTelemetry tm21 = new ExtruderTelemetry()
+                .setTime(of(2020, 10, 22, 3, 16, 7,0, UTC));
+        ExtruderTelemetry tm22 = new ExtruderTelemetry()
+                .setTime(of(2020, 10, 22, 3, 45, 7,0, UTC));
+        // 3 group
+        ExtruderTelemetry tm31 = new ExtruderTelemetry()
                 .setTime(of(2020, 10, 22, 8, 1, 27,0, UTC));
-        ExtruderTelemetry tm4 = new ExtruderTelemetry()
+        ExtruderTelemetry tm32 = new ExtruderTelemetry()
                 .setTime(of(2020, 10, 22, 8, 1, 27,0, UTC));
-        ExtruderTelemetry tm5 = new ExtruderTelemetry()
+        // 4 group
+        ExtruderTelemetry tm41 = new ExtruderTelemetry()
                 .setTime(of(2020, 10, 22, 11, 46, 5,0, UTC));
-        ExtruderTelemetry tm6 = new ExtruderTelemetry()
+        // 5 group
+        ExtruderTelemetry tm51 = new ExtruderTelemetry()
                 .setTime(of(2020, 10, 22, 15, 4, 37,0, UTC));
-        return Lists.newArrayList(tm1, tm2, tm3, tm4, tm5, tm6);
+        return Lists.newArrayList(tm11, tm12, tm21, tm22, tm31, tm32, tm41, tm51);
     }
 
     @Test

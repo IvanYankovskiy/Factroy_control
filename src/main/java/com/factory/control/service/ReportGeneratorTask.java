@@ -23,8 +23,8 @@ public class ReportGeneratorTask {
     public void generateReportForPreviousHour() {
         OffsetDateTime to = OffsetDateTime.now().truncatedTo(ChronoUnit.HOURS);
         OffsetDateTime from = to.minusHours(1);
-        log.info("Start generating extruder reports for period [{} - {}]", from.toString(), to.toString());
+        log.info("Start generating extruder reports for period [{} - {}]", from, to);
         extruderTelemetryReportGenerator.generateForAllDevicesInPeriod(from, to);
-        log.info("Finished generating extruder reports for period [{} - {}]", from.toString(), to.toString());
+        log.info("Finished generating extruder reports for period [{} - {}]", from, to);
     }
 }

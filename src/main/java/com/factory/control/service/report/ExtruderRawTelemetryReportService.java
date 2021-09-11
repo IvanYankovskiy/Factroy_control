@@ -15,10 +15,11 @@ import org.springframework.stereotype.Service;
 import java.time.Duration;
 import java.time.OffsetDateTime;
 import java.time.Period;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
+
+import static java.util.Collections.emptyList;
 
 @Service
 public class ExtruderRawTelemetryReportService {
@@ -54,7 +55,7 @@ public class ExtruderRawTelemetryReportService {
                 .orElseThrow(() -> new DeviceIsNotFoundException(token));
         List<ExtruderTelemetry> telemetryList = repository
                 .findTelemetriesInPeriod(device.getId(), startOfPeriod, endOfPeriod)
-                .orElse(new ArrayList<>());
+                .orElse(emptyList());
 
         ExtruderRawTelemetryReportDTO report = new ExtruderRawTelemetryReportDTO();
         ExtruderDTO extruderDTO = extruderMapper.fromEntityToDto(device);
