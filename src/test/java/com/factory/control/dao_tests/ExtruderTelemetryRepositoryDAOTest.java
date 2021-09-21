@@ -68,7 +68,7 @@ class ExtruderTelemetryRepositoryDAOTest {
     private Device createDevice() {
         Device device = new Device()
                 .setName("test device")
-                .setToken(UUID.randomUUID().toString())
+                .setUuid(UUID.randomUUID().toString())
                 .setDescription("description")
                 .setDeviceType(DeviceType.EXTRUDER);
         device = testEntityManager.merge(device);

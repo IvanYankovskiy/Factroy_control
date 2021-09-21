@@ -38,21 +38,21 @@ public class ExtruderRawTelemetryReportService {
         this.extruderMapper = extruderMapper;
     }
 
-    public ExtruderRawTelemetryReportDTO getRawTelemetryReportForLastDuration(String token, Duration duration) {
+    public ExtruderRawTelemetryReportDTO getRawTelemetryReportForLastDuration(String uuid, Duration duration) {
         OffsetDateTime endOfPeriod = OffsetDateTime.now();
         OffsetDateTime startOfPeriod = endOfPeriod.minus(duration);
-        return getRawTelemetryReportByPeriod(token, startOfPeriod, endOfPeriod);
+        return getRawTelemetryReportByPeriod(uuid, startOfPeriod, endOfPeriod);
     }
 
-    public ExtruderRawTelemetryReportDTO getRawTelemetryReportForLastPeriod(String token, Period period) {
+    public ExtruderRawTelemetryReportDTO getRawTelemetryReportForLastPeriod(String uuid, Period period) {
         OffsetDateTime endOfPeriod = OffsetDateTime.now();
         OffsetDateTime startOfPeriod = endOfPeriod.minus(period);
-        return getRawTelemetryReportByPeriod(token, startOfPeriod, endOfPeriod);
+        return getRawTelemetryReportByPeriod(uuid, startOfPeriod, endOfPeriod);
     }
 
-    protected ExtruderRawTelemetryReportDTO getRawTelemetryReportByPeriod(String token, OffsetDateTime startOfPeriod, OffsetDateTime endOfPeriod) {
-        Extruder device = Optional.of(extruderRepository.findByToken(token))
-                .orElseThrow(() -> new DeviceIsNotFoundException(token));
+    protected ExtruderRawTelemetryReportDTO getRawTelemetryReportByPeriod(String uuid, OffsetDateTime startOfPeriod, OffsetDateTime endOfPeriod) {
+        Extruder device = Optional.of(extruderRepository.findByUuid(uuid))
+                .orElseThrow(() -> new DeviceIsNotFoundException(uuid));
         List<ExtruderTelemetry> telemetryList = repository
                 .findTelemetriesInPeriod(device.getId(), startOfPeriod, endOfPeriod)
                 .orElse(emptyList());

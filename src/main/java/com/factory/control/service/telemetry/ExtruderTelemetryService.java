@@ -31,10 +31,10 @@ public class ExtruderTelemetryService {
         this.deviceRepository = deviceRepository;
     }
 
-    public String saveTelemetry(String token, ExtruderTelemetryDTO telemetryDTO) {
-        Device device = deviceRepository.findByToken(token);
+    public String saveTelemetry(String uuid, ExtruderTelemetryDTO telemetryDTO) {
+        Device device = deviceRepository.findByUuid(uuid);
         if (Objects.isNull(device)) {
-            throw new DeviceIsNotFoundException(token);
+            throw new DeviceIsNotFoundException(uuid);
         }
         ExtruderTelemetry extruderTelemetry = extruderTelemetryMapper.fromDtoToEntity(telemetryDTO);
         extruderTelemetry.setDevice(device);

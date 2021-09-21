@@ -23,7 +23,7 @@ public interface DeviceMapper extends DeviceManagementMapper<DeviceDTO, Device> 
     @Mapping(target = "description", source = "dto.description")
     Device fromDtoToEntity(DeviceDTO dto);
 
-    @Mapping(target = "token", source = "entity.token")
+    @Mapping(target = "uuid", source = "entity.uuid")
     @Mapping(target = "name", source = "entity.name")
     @Mapping(target = "deviceType", source = "entity.deviceType")
     @Mapping(target = "description", source = "entity.description")

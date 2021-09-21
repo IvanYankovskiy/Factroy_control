@@ -31,21 +31,21 @@ public class ExtruderTelemetryReportService {
     private final ExtruderReportMetricsCalculator extruderReportMetricsCalculator;
     private final ExtruderFinalReportGenerator extruderFinalReportGenerator;
 
-    public ExtruderTelemetryReportTotalDTO getTelemetryReportForLastDuration(String token, Duration period) {
+    public ExtruderTelemetryReportTotalDTO getTelemetryReportForLastDuration(String uuid, Duration period) {
         OffsetDateTime endOfPeriod = OffsetDateTime.now().truncatedTo(HOURS).plusHours(1);
         OffsetDateTime startOfPeriod = endOfPeriod.minus(period);
-        return getTelemetryReportByPeriodDirectly(token, startOfPeriod, endOfPeriod);
+        return getTelemetryReportByPeriodDirectly(uuid, startOfPeriod, endOfPeriod);
     }
 
-    public ExtruderTelemetryReportTotalDTO getTelemetryReportForLastPeriod(String token, Period period) {
+    public ExtruderTelemetryReportTotalDTO getTelemetryReportForLastPeriod(String uuid, Period period) {
         OffsetDateTime endOfPeriod = OffsetDateTime.now().truncatedTo(HOURS).plusHours(1);
         OffsetDateTime startOfPeriod = endOfPeriod.minus(period);
-        return getTelemetryReportByPeriodDirectly(token, startOfPeriod, endOfPeriod);
+        return getTelemetryReportByPeriodDirectly(uuid, startOfPeriod, endOfPeriod);
     }
 
-    public ExtruderTelemetryReportTotalDTO getTelemetryReportByPeriodDirectly(String token, OffsetDateTime startOfPeriod, OffsetDateTime endOfPeriod) {
-        Extruder device = Optional.of(extruderRepository.findByToken(token))
-                .orElseThrow(() -> new DeviceIsNotFoundException(token));
+    public ExtruderTelemetryReportTotalDTO getTelemetryReportByPeriodDirectly(String uuid, OffsetDateTime startOfPeriod, OffsetDateTime endOfPeriod) {
+        Extruder device = Optional.of(extruderRepository.findByUuid(uuid))
+                .orElseThrow(() -> new DeviceIsNotFoundException(uuid));
         OffsetDateTime startOfCurrentHour = endOfPeriod.truncatedTo(HOURS).minusHours(1);
 
         List<ExtruderTelemetry> telemetryList = extruderTelemetryRepository

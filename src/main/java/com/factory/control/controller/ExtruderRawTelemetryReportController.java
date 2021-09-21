@@ -24,25 +24,25 @@ public class ExtruderRawTelemetryReportController {
         this.service = service;
     }
 
-    @GetMapping("extruder/{token}/report/raw/lasthour")
-    public ExtruderRawTelemetryReportDTO getLastHourRawTelemetry(@PathVariable String token) {
-        return service.getRawTelemetryReportForLastDuration(token, Duration.ofHours(1));
+    @GetMapping("extruder/{uuid}/report/raw/lasthour")
+    public ExtruderRawTelemetryReportDTO getLastHourRawTelemetry(@PathVariable String uuid) {
+        return service.getRawTelemetryReportForLastDuration(uuid, Duration.ofHours(1));
     }
 
-    @GetMapping("extruder/{token}/report/raw/last12hours")
-    public ExtruderRawTelemetryReportDTO getLast12HoursRawTelemetry(@PathVariable String token) {
-        return service.getRawTelemetryReportForLastDuration(token, Duration.ofHours(12));
+    @GetMapping("extruder/{uuid}/report/raw/last12hours")
+    public ExtruderRawTelemetryReportDTO getLast12HoursRawTelemetry(@PathVariable String uuid) {
+        return service.getRawTelemetryReportForLastDuration(uuid, Duration.ofHours(12));
     }
 
-    @GetMapping("extruder/{token}/report/raw/lastweek")
-    public ExtruderRawTelemetryReportDTO getLastWeekRawTelemetry(@PathVariable String token) {
-        return service.getRawTelemetryReportForLastDuration(token, ofDays(7));
+    @GetMapping("extruder/{uuid}/report/raw/lastweek")
+    public ExtruderRawTelemetryReportDTO getLastWeekRawTelemetry(@PathVariable String uuid) {
+        return service.getRawTelemetryReportForLastDuration(uuid, ofDays(7));
     }
 
-    @GetMapping("extruder/{token}/report/raw/lastmonth")
-    public ExtruderRawTelemetryReportDTO getLastMonthRawTelemetry(@PathVariable String token) {
+    @GetMapping("extruder/{uuid}/report/raw/lastmonth")
+    public ExtruderRawTelemetryReportDTO getLastMonthRawTelemetry(@PathVariable String uuid) {
         LocalDate today = now();
-        return service.getRawTelemetryReportForLastPeriod(token, Period.between(today.withDayOfMonth(1), today.plusDays(1)));
+        return service.getRawTelemetryReportForLastPeriod(uuid, Period.between(today.withDayOfMonth(1), today.plusDays(1)));
     }
     
 }

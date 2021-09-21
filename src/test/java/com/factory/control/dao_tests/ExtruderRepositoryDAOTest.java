@@ -29,7 +29,7 @@ class ExtruderRepositoryDAOTest {
         Extruder extruder = new Extruder();
         extruder.setName("Extruder 1 full described");
         extruder.setDeviceType(DeviceType.EXTRUDER);
-        extruder.setToken(UUID.randomUUID().toString());
+        extruder.setUuid(UUID.randomUUID().toString());
         extruder.setCircumference(BigDecimal.valueOf(121.56));
         testEntityManager.persistAndFlush(extruder);
 

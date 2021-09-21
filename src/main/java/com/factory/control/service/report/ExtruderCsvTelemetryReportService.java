@@ -27,13 +27,13 @@ public class ExtruderCsvTelemetryReportService {
 
     private final ExtruderTelemetryReportService reportService;
 
-    public InMemoryFileContainer getCsvReportForLastDuration(String token, Duration duration) {
-        ExtruderTelemetryReportTotalDTO report = reportService.getTelemetryReportForLastDuration(token, duration);
+    public InMemoryFileContainer getCsvReportForLastDuration(String uuid, Duration duration) {
+        ExtruderTelemetryReportTotalDTO report = reportService.getTelemetryReportForLastDuration(uuid, duration);
         return generateCsvForReport(report);
     }
 
-    public InMemoryFileContainer getCsvReportForLastPeriod(String token, Period period) {
-        ExtruderTelemetryReportTotalDTO report = reportService.getTelemetryReportForLastPeriod(token, period);
+    public InMemoryFileContainer getCsvReportForLastPeriod(String uuid, Period period) {
+        ExtruderTelemetryReportTotalDTO report = reportService.getTelemetryReportForLastPeriod(uuid, period);
         return generateCsvForReport(report);
     }
 

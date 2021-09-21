@@ -21,7 +21,7 @@ import java.io.Serializable;
 @Data
 public class DeviceDTO implements Serializable {
 
-    private String token;
+    private String uuid;
 
     @NotNull(message = "Device type can't be null")
     private String deviceType;

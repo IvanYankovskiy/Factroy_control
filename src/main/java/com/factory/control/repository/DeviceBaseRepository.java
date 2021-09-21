@@ -9,5 +9,5 @@ import java.io.Serializable;
 @Repository
 public interface DeviceBaseRepository<E extends Device, ID extends Serializable> extends JpaRepository<E, ID> {
 
-    E findByToken(String token);
+    E findByUuid(String uuid);
 }

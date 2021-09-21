@@ -8,11 +8,11 @@ public interface DeviceManagementService<T extends DeviceDTO> {
 
     T createDevice(T newDeviceDto);
 
-    T updateDevice(String token, T deviceDto);
+    T updateDevice(String uuid, T deviceDto);
 
     List<T> selectAll();
 
-    T selectByToken(String token);
+    T selectByUuid(String uuid);
 
     String getDeviceType();
 }

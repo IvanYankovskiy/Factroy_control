@@ -29,14 +29,14 @@
 						"method": "GET",
 						"header": [],
 						"url": {
-							"raw": "{{host}}:{{port}}/extruder/{{extruder_token}}/report/lasthour",
+							"raw": "{{host}}:{{port}}/extruder/{{extruder_uuid}}/report/lasthour",
 							"host": [
 								"{{host}}"
 							],
 							"port": "{{port}}",
 							"path": [
 								"extruder",
-								"{{extruder_token}}",
+								"{{extruder_uuid}}",
 								"report",
 								"lasthour"
 							]
@@ -65,14 +65,14 @@
 						"method": "GET",
 						"header": [],
 						"url": {
-							"raw": "{{host}}:{{port}}/extruder/{{extruder_token}}/report/last12hours",
+							"raw": "{{host}}:{{port}}/extruder/{{extruder_uuid}}/report/last12hours",
 							"host": [
 								"{{host}}"
 							],
 							"port": "{{port}}",
 							"path": [
 								"extruder",
-								"{{extruder_token}}",
+								"{{extruder_uuid}}",
 								"report",
 								"last12hours"
 							]
@@ -101,14 +101,14 @@
 						"method": "GET",
 						"header": [],
 						"url": {
-							"raw": "{{host}}:{{port}}/extruder/{{extruder_token}}/report/lastweek",
+							"raw": "{{host}}:{{port}}/extruder/{{extruder_uuid}}/report/lastweek",
 							"host": [
 								"{{host}}"
 							],
 							"port": "{{port}}",
 							"path": [
 								"extruder",
-								"{{extruder_token}}",
+								"{{extruder_uuid}}",
 								"report",
 								"lastweek"
 							]
@@ -137,14 +137,14 @@
 						"method": "GET",
 						"header": [],
 						"url": {
-							"raw": "{{host}}:{{port}}/extruder/{{extruder_token}}/report/lastmonth",
+							"raw": "{{host}}:{{port}}/extruder/{{extruder_uuid}}/report/lastmonth",
 							"host": [
 								"{{host}}"
 							],
 							"port": "{{port}}",
 							"path": [
 								"extruder",
-								"{{extruder_token}}",
+								"{{extruder_uuid}}",
 								"report",
 								"lastmonth"
 							]

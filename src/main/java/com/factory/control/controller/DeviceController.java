@@ -37,11 +37,11 @@ public class DeviceController<T extends DeviceDTO> {
         return deviceManagementService.selectAll();
     }
 
-    @GetMapping("/device/{type}/{token}")
-    public T selectByToken(@PathVariable("type") String type,
-                                   @PathVariable("token") String token) {
+    @GetMapping("/device/{type}/{uuid}")
+    public T selectByUuid(@PathVariable("type") String type,
+                          @PathVariable("uuid") String uuid) {
         DeviceManagementService<T> deviceManagementService = getDeviceManagementService(type);
-        return deviceManagementService.selectByToken(token);
+        return deviceManagementService.selectByUuid(uuid);
     }
 
     @PostMapping("/device/{type}")
@@ -51,11 +51,11 @@ public class DeviceController<T extends DeviceDTO> {
         return deviceManagementService.createDevice(deviceDto);
     }
 
-    @PostMapping("/device/{type}/{token}")
+    @PostMapping("/device/{type}/{uuid}")
     public T updateDevice(@PathVariable("type") String type,
-                                  @PathVariable("token") String token, @Valid @RequestBody T deviceDto) {
+                                  @PathVariable("uuid") String uuid, @Valid @RequestBody T deviceDto) {
         DeviceManagementService<T> deviceManagementService = getDeviceManagementService(type);
-        return deviceManagementService.updateDevice(token, deviceDto);
+        return deviceManagementService.updateDevice(uuid, deviceDto);
     }
 
     private DeviceManagementService<T> getDeviceManagementService(String type) {

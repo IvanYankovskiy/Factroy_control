@@ -33,9 +33,9 @@ public class ExtruderDeviceManagementService implements DeviceManagementService<
     }
 
     @Override
-    public ExtruderDTO updateDevice(String token, ExtruderDTO deviceDto) {
-        Extruder persisted = Optional.of(crudService.selectByToken(token))
-                .orElseThrow(() -> new DeviceIsNotFoundException(token));
+    public ExtruderDTO updateDevice(String uuid, ExtruderDTO deviceDto) {
+        Extruder persisted = Optional.of(crudService.selectByUuid(uuid))
+                .orElseThrow(() -> new DeviceIsNotFoundException(uuid));
         Extruder deviceWish = extruderMapper.fromDtoToEntity(deviceDto);
         crudService.update(persisted, deviceWish);
         return extruderMapper.fromEntityToDto(persisted);
@@ -48,9 +48,9 @@ public class ExtruderDeviceManagementService implements DeviceManagementService<
     }
 
     @Override
-    public ExtruderDTO selectByToken(String token) {
-        Extruder persisted = Optional.of(crudService.selectByToken(token))
-                .orElseThrow(() -> new DeviceIsNotFoundException(token));
+    public ExtruderDTO selectByUuid(String uuid) {
+        Extruder persisted = Optional.of(crudService.selectByUuid(uuid))
+                .orElseThrow(() -> new DeviceIsNotFoundException(uuid));
         return extruderMapper.fromEntityToDto(persisted);
     }
 

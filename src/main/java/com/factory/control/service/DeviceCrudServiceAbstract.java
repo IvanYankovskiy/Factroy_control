@@ -23,8 +23,8 @@ public abstract class DeviceCrudServiceAbstract<E extends Device, ID extends Ser
         return getRepository().findAll();
     }
 
-    public E selectByToken(String token) {
-        return getRepository().findByToken(token);
+    public E selectByUuid(String uuid) {
+        return getRepository().findByUuid(uuid);
     }
 
     public E create(E newDevice) {
@@ -40,7 +40,7 @@ public abstract class DeviceCrudServiceAbstract<E extends Device, ID extends Ser
     abstract String getType();
 
     protected void beforeCreate(E newDevice) {
-        newDevice.setToken(UUID.randomUUID().toString());
+        newDevice.setUuid(UUID.randomUUID().toString());
     }
 
     protected void beforeUpdate(E existedDevice, E deviceWish) {

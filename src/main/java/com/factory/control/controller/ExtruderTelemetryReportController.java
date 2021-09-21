@@ -26,52 +26,52 @@ public class ExtruderTelemetryReportController {
     private final ExtruderTelemetryReportService service;
     private final ExtruderCsvTelemetryReportService extruderCsvTelemetryReportService;
 
-    @GetMapping("extruder/{token}/report/lasthour")
-    public ExtruderTelemetryReportTotalDTO getLastHourPerformance(@PathVariable String token) {
-        return service.getTelemetryReportForLastDuration(token, ofHours(1));
+    @GetMapping("extruder/{uuid}/report/lasthour")
+    public ExtruderTelemetryReportTotalDTO getLastHourPerformance(@PathVariable String uuid) {
+        return service.getTelemetryReportForLastDuration(uuid, ofHours(1));
     }
 
-    @GetMapping("extruder/{token}/report/last12hours")
-    public ExtruderTelemetryReportTotalDTO getLast12HoursPerformance(@PathVariable String token) {
-        return service.getTelemetryReportForLastDuration(token, ofHours(12));
+    @GetMapping("extruder/{uuid}/report/last12hours")
+    public ExtruderTelemetryReportTotalDTO getLast12HoursPerformance(@PathVariable String uuid) {
+        return service.getTelemetryReportForLastDuration(uuid, ofHours(12));
     }
 
-    @GetMapping("extruder/{token}/report/lastweek")
-    public ExtruderTelemetryReportTotalDTO getLastWeekPerformance(@PathVariable String token) {
-        return service.getTelemetryReportForLastDuration(token, ofDays(7));
+    @GetMapping("extruder/{uuid}/report/lastweek")
+    public ExtruderTelemetryReportTotalDTO getLastWeekPerformance(@PathVariable String uuid) {
+        return service.getTelemetryReportForLastDuration(uuid, ofDays(7));
     }
 
-    @GetMapping("extruder/{token}/report/lastmonth")
-    public ExtruderTelemetryReportTotalDTO getLastMonthPerformance(@PathVariable String token) {
+    @GetMapping("extruder/{uuid}/report/lastmonth")
+    public ExtruderTelemetryReportTotalDTO getLastMonthPerformance(@PathVariable String uuid) {
         LocalDate today = now();
-        return service.getTelemetryReportForLastPeriod(token, Period.between(today.withDayOfMonth(1), today.plusDays(1)));
+        return service.getTelemetryReportForLastPeriod(uuid, Period.between(today.withDayOfMonth(1), today.plusDays(1)));
     }
 
-    @GetMapping("extruder/{token}/report/csv/last-hour")
-    public ResponseEntity<byte[]> getLastHourPerformanceAsCsv(@PathVariable String token) {
-        InMemoryFileContainer report = extruderCsvTelemetryReportService.getCsvReportForLastDuration(token, ofHours(1));
+    @GetMapping("extruder/{uuid}/report/csv/last-hour")
+    public ResponseEntity<byte[]> getLastHourPerformanceAsCsv(@PathVariable String uuid) {
+        InMemoryFileContainer report = extruderCsvTelemetryReportService.getCsvReportForLastDuration(uuid, ofHours(1));
         HttpHeaders headers = getHttpHeadersForCsvReport(report);
         return new ResponseEntity<>(report.getContent(), headers, HttpStatus.OK);
     }
 
-    @GetMapping("extruder/{token}/report/csv/last-12-hours")
-    public ResponseEntity<byte[]> getLast12hoursPerformanceAsCsv(@PathVariable String token) {
-        InMemoryFileContainer report = extruderCsvTelemetryReportService.getCsvReportForLastDuration(token, ofHours(12));
+    @GetMapping("extruder/{uuid}/report/csv/last-12-hours")
+    public ResponseEntity<byte[]> getLast12hoursPerformanceAsCsv(@PathVariable String uuid) {
+        InMemoryFileContainer report = extruderCsvTelemetryReportService.getCsvReportForLastDuration(uuid, ofHours(12));
         HttpHeaders headers = getHttpHeadersForCsvReport(report);
         return new ResponseEntity<>(report.getContent(), headers, HttpStatus.OK);
     }
 
-    @GetMapping("extruder/{token}/report/csv/last-week")
-    public ResponseEntity<byte[]> getLastWeekPerformanceAsCsv(@PathVariable String token) {
-        InMemoryFileContainer report = extruderCsvTelemetryReportService.getCsvReportForLastDuration(token, ofDays(7));
+    @GetMapping("extruder/{uuid}/report/csv/last-week")
+    public ResponseEntity<byte[]> getLastWeekPerformanceAsCsv(@PathVariable String uuid) {
+        InMemoryFileContainer report = extruderCsvTelemetryReportService.getCsvReportForLastDuration(uuid, ofDays(7));
         HttpHeaders headers = getHttpHeadersForCsvReport(report);
         return new ResponseEntity<>(report.getContent(), headers, HttpStatus.OK);
     }
 
-    @GetMapping("extruder/{token}/report/csv/last-month")
-    public ResponseEntity<byte[]> getLastMonthPerformanceAsCsv(@PathVariable String token) {
+    @GetMapping("extruder/{uuid}/report/csv/last-month")
+    public ResponseEntity<byte[]> getLastMonthPerformanceAsCsv(@PathVariable String uuid) {
         LocalDate today = now();
-        InMemoryFileContainer report = extruderCsvTelemetryReportService.getCsvReportForLastPeriod(token, Period.between(today.withDayOfMonth(1), today.plusDays(1)));
+        InMemoryFileContainer report = extruderCsvTelemetryReportService.getCsvReportForLastPeriod(uuid, Period.between(today.withDayOfMonth(1), today.plusDays(1)));
         HttpHeaders headers = getHttpHeadersForCsvReport(report);
         return new ResponseEntity<>(report.getContent(), headers, HttpStatus.OK);
     }
