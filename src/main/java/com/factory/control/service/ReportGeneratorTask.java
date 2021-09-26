@@ -3,7 +3,6 @@ package com.factory.control.service;
 import com.factory.control.service.report.ExtruderTelemetryReportGenerator;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
 
 import java.time.OffsetDateTime;
@@ -19,7 +18,6 @@ public class ReportGeneratorTask {
         this.extruderTelemetryReportGenerator = extruderTelemetryReportGenerator;
     }
 
-    @Scheduled(cron = "0 0 * * * *")
     public void generateReportForPreviousHour() {
         OffsetDateTime to = OffsetDateTime.now().truncatedTo(ChronoUnit.HOURS);
         OffsetDateTime from = to.minusHours(1);
