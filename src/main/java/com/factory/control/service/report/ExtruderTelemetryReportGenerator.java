@@ -18,6 +18,7 @@ import java.util.stream.Collectors;
 
 import static java.util.Collections.emptyList;
 
+@Deprecated
 @Component
 @Transactional
 public class ExtruderTelemetryReportGenerator {

@@ -21,6 +21,7 @@ import java.util.Optional;
 
 import static java.time.temporal.ChronoUnit.HOURS;
 
+@Deprecated
 @Service
 @RequiredArgsConstructor
 public class ExtruderTelemetryReportService {
