@@ -9,9 +9,9 @@ import java.util.List;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-class ExtruderTelemetryAggregatorTest {
+class ExtruderTelemetryProcessorTest {
 
-    private ExtruderTelemetryAggregator aggregator = new ExtruderTelemetryAggregator();
+    private ExtruderTelemetryProcessor aggregator = new ExtruderTelemetryProcessor();
 
     @Test
     void testReduceExtruderTelemetry() {

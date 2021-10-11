@@ -4,12 +4,10 @@ import com.factory.control.controller.dto.ExtruderDTO;
 import com.factory.control.controller.mapper.ExtruderMapper;
 import com.factory.control.domain.entities.DeviceType;
 import com.factory.control.domain.entities.Extruder;
-import com.factory.control.service.exception.DeviceIsNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
-import java.util.Optional;
 
 @Service
 public class ExtruderDeviceManagementService implements DeviceManagementService<ExtruderDTO> {
@@ -19,7 +17,7 @@ public class ExtruderDeviceManagementService implements DeviceManagementService<
     private final ExtruderMapper extruderMapper;
 
     @Autowired
-    public ExtruderDeviceManagementService(DeviceCrudServiceAbstract extruderCrudService,
+    public ExtruderDeviceManagementService(DeviceCrudServiceAbstract<Extruder, Integer> extruderCrudService,
                                            ExtruderMapper extruderMapper) {
         this.crudService = extruderCrudService;
         this.extruderMapper = extruderMapper;
@@ -34,8 +32,7 @@ public class ExtruderDeviceManagementService implements DeviceManagementService<
 
     @Override
     public ExtruderDTO updateDevice(String uuid, ExtruderDTO deviceDto) {
-        Extruder persisted = Optional.of(crudService.selectByUuid(uuid))
-                .orElseThrow(() -> new DeviceIsNotFoundException(uuid));
+        Extruder persisted = crudService.selectByUuid(uuid);
         Extruder deviceWish = extruderMapper.fromDtoToEntity(deviceDto);
         crudService.update(persisted, deviceWish);
         return extruderMapper.fromEntityToDto(persisted);
@@ -49,8 +46,7 @@ public class ExtruderDeviceManagementService implements DeviceManagementService<
 
     @Override
     public ExtruderDTO selectByUuid(String uuid) {
-        Extruder persisted = Optional.of(crudService.selectByUuid(uuid))
-                .orElseThrow(() -> new DeviceIsNotFoundException(uuid));
+        Extruder persisted = crudService.selectByUuid(uuid);
         return extruderMapper.fromEntityToDto(persisted);
     }
 

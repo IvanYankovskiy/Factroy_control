@@ -9,7 +9,7 @@ import java.util.Comparator;
 import java.util.List;
 
 @Component
-public class ExtruderTelemetryAggregator implements TimeBasedProcessor<ExtruderTelemetry, ExtruderTelemetry> {
+public class ExtruderTelemetryProcessor implements TimeBasedProcessor<ExtruderTelemetry, ExtruderTelemetry> {
 
     @Override
     public List<ExtruderTelemetry> reduce(List<ExtruderTelemetry> input) {

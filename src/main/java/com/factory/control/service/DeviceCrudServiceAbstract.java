@@ -2,9 +2,11 @@ package com.factory.control.service;
 
 import com.factory.control.domain.entities.Device;
 import com.factory.control.repository.DeviceBaseRepository;
+import com.factory.control.service.exception.DeviceIsNotFoundException;
 
 import java.io.Serializable;
 import java.util.List;
+import java.util.Optional;
 import java.util.UUID;
 
 public abstract class DeviceCrudServiceAbstract<E extends Device, ID extends Serializable> {
@@ -24,7 +26,7 @@ public abstract class DeviceCrudServiceAbstract<E extends Device, ID extends Ser
     }
 
     public E selectByUuid(String uuid) {
-        return getRepository().findByUuid(uuid);
+        return Optional.of(getRepository().findByUuid(uuid)).orElseThrow(() -> new DeviceIsNotFoundException(uuid));
     }
 
     public E create(E newDevice) {
