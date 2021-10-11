@@ -1,8 +1,9 @@
-package com.factory.control.service.telemetry;
+package com.factory.control.service;
 
 import com.factory.control.controller.dto.ExtruderTelemetryDTO;
 import com.factory.control.controller.mapper.ExtruderTelemetryMapper;
 import com.factory.control.domain.entities.Device;
+import com.factory.control.domain.entities.Extruder;
 import com.factory.control.domain.entities.ExtruderTelemetry;
 import com.factory.control.repository.DeviceBaseRepository;
 import com.factory.control.repository.ExtruderTelemetryRepository;
@@ -20,12 +21,12 @@ public class ExtruderTelemetryService {
 
     private final ExtruderTelemetryRepository repository;
 
-    private final DeviceBaseRepository deviceRepository;
+    private final DeviceBaseRepository<Extruder, Long> deviceRepository;
 
     @Autowired
     public ExtruderTelemetryService(ExtruderTelemetryMapper extruderTelemetryMapper,
                                     ExtruderTelemetryRepository repository,
-                                    DeviceBaseRepository deviceRepository) {
+                                    DeviceBaseRepository<Extruder, Long> deviceRepository) {
         this.repository = repository;
         this.extruderTelemetryMapper = extruderTelemetryMapper;
         this.deviceRepository = deviceRepository;
