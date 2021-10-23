@@ -2,12 +2,12 @@ FROM alpine/git as repo
 WORKDIR /app
 run git clone --single-branch -b custom https://github.com/IvanYankovskiy/Factory_control.git
 
-FROM maven:3.5-jdk-8-alpine as build
+FROM maven:3.8-openjdk-11-slim as build
 WORKDIR /app
 COPY --from=repo /app/Factory_control /app
 RUN mvn clean install -DskipTests
 
-FROM openjdk:8-jdk-alpine as app
+FROM adoptopenjdk/openjdk11 as app
 EXPOSE 8080
 
 WORKDIR root/

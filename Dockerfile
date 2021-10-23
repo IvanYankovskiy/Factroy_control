@@ -1,4 +1,4 @@
-FROM openjdk:8-jdk-alpine
+FROM adoptopenjdk/openjdk11
 EXPOSE 8080
 
 WORKDIR root/
