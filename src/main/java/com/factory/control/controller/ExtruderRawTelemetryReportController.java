@@ -1,6 +1,9 @@
 package com.factory.control.controller;
 
+import com.factory.control.controller.dto.AggregationSettingsDTO;
+import com.factory.control.controller.dto.ExtruderRawTelemetryAggregatedReportDTO;
 import com.factory.control.controller.dto.ExtruderRawTelemetryReportDTO;
+import com.factory.control.facade.ExtruderTelemetryFacade;
 import com.factory.control.service.report.ExtruderRawTelemetryReportService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -9,6 +12,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import java.time.Duration;
 import java.time.LocalDate;
+import java.time.OffsetDateTime;
 import java.time.Period;
 
 import static java.time.Duration.ofDays;
@@ -16,12 +20,16 @@ import static java.time.LocalDate.now;
 
 @RestController
 public class ExtruderRawTelemetryReportController {
-    
     private final ExtruderRawTelemetryReportService service;
+    private final ExtruderTelemetryFacade extruderTelemetryFacade;
 
     @Autowired
-    public ExtruderRawTelemetryReportController(ExtruderRawTelemetryReportService service) {
+    public ExtruderRawTelemetryReportController(
+            ExtruderRawTelemetryReportService service,
+            ExtruderTelemetryFacade extruderTelemetryFacade
+    ) {
         this.service = service;
+        this.extruderTelemetryFacade = extruderTelemetryFacade;
     }
 
     @GetMapping("extruder/{uuid}/report/raw/lasthour")
@@ -44,5 +52,15 @@ public class ExtruderRawTelemetryReportController {
         LocalDate today = now();
         return service.getRawTelemetryReportForLastPeriod(uuid, Period.between(today.withDayOfMonth(1), today.plusDays(1)));
     }
+
+
+    @GetMapping("extruder/{uuid}/report/raw")
+    public ExtruderRawTelemetryAggregatedReportDTO<OffsetDateTime> getWithAggregation(
+            @PathVariable String uuid,
+            AggregationSettingsDTO settings
+    ) {
+        return extruderTelemetryFacade.aggregateForSingleDevice(uuid, settings);
+    }
+
     
 }

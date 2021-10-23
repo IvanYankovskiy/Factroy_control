@@ -1,5 +1,6 @@
 package com.factory.control.service;
 
+import com.factory.control.domain.bo.ExtruderRawTelemetryReport;
 import com.factory.control.domain.entities.Extruder;
 import com.factory.control.domain.entities.ExtruderTelemetry;
 import com.factory.control.repository.ExtruderTelemetryRepository;
@@ -19,8 +20,21 @@ public class ExtruderTelemetryDomainService {
     private final DeviceCrudServiceAbstract<Extruder, Integer> extruderDeviceService;
     private final ExtruderTelemetryRepository extruderTelemetryRepository;
 
-    public List<ExtruderTelemetry> aggregate(String uuid, AggregationSettings<OffsetDateTime> timeSettings) {
+    public ExtruderRawTelemetryReport<OffsetDateTime> aggregateReportForSingleDevice(
+            String uuid,
+            AggregationSettings<OffsetDateTime> timeSettings
+    ) {
         Extruder extruder = extruderDeviceService.selectByUuid(uuid);
+        List<ExtruderTelemetry> telemetry = aggregateForSingleDevice(timeSettings, extruder);
+        return new ExtruderRawTelemetryReport<>(extruder, timeSettings, telemetry);
+    }
+
+    public List<ExtruderTelemetry> aggregateForSingleDevice(String uuid, AggregationSettings<OffsetDateTime> timeSettings) {
+        Extruder extruder = extruderDeviceService.selectByUuid(uuid);
+        return aggregateForSingleDevice(timeSettings, extruder);
+    }
+
+    private List<ExtruderTelemetry> aggregateForSingleDevice(AggregationSettings<OffsetDateTime> timeSettings, Extruder extruder) {
         List<ExtruderTelemetry> savedTelemetry = extruderTelemetryRepository
                 .findTelemetriesInPeriod(extruder.getId(), timeSettings.getFrom(), timeSettings.getTo())
                 .orElse(Collections.emptyList());
