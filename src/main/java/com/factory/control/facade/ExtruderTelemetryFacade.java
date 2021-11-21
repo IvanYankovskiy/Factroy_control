@@ -2,6 +2,7 @@ package com.factory.control.facade;
 
 import com.factory.control.controller.dto.AggregationSettingsDTO;
 import com.factory.control.controller.dto.ExtruderRawTelemetryAggregatedReportDTO;
+import com.factory.control.controller.mapper.AggregationSettingsMapper;
 import com.factory.control.controller.mapper.ExtruderRawTelemetryReportMapper;
 import com.factory.control.domain.bo.ExtruderRawTelemetryReport;
 import com.factory.control.domain.bo.InMemoryFileContainer;
@@ -20,17 +21,14 @@ public class ExtruderTelemetryFacade {
     private final ExtruderTelemetryDomainService extruderTelemetryDomainService;
     private final ExtruderRawTelemetryReportMapper extruderRawTelemetryReportMapper;
     private final ExtruderRawTelemetryExcelService extruderRawTelemetryExcelService;
+    private final AggregationSettingsMapper aggregationSettingsMapper;
 
     public ExtruderRawTelemetryAggregatedReportDTO<OffsetDateTime> aggregateForSingleDevice(
             String uuid,
             AggregationSettingsDTO settings
     ) {
-        AggregationSettings<OffsetDateTime> aggregationSettings = new AggregationSettings<>(
-                OffsetDateTime.from(settings.getFrom()),
-                OffsetDateTime.from(settings.getTo()),
-                settings.getWindowValue(),
-                settings.getWindowUnit()
-        );
+        AggregationSettings<OffsetDateTime> aggregationSettings = aggregationSettingsMapper
+                .mapToEntity(settings, OffsetDateTime::from);
         ExtruderRawTelemetryReport<OffsetDateTime> report = extruderTelemetryDomainService
                 .aggregateReportForSingleDevice(uuid, aggregationSettings);
         return extruderRawTelemetryReportMapper.mapToDto(report);
@@ -40,12 +38,8 @@ public class ExtruderTelemetryFacade {
             String uuid,
             AggregationSettingsDTO settings
     ) throws IOException {
-        AggregationSettings<OffsetDateTime> aggregationSettings = new AggregationSettings<>(
-                OffsetDateTime.from(settings.getFrom()),
-                OffsetDateTime.from(settings.getTo()),
-                settings.getWindowValue(),
-                settings.getWindowUnit()
-        );
+        AggregationSettings<OffsetDateTime> aggregationSettings = aggregationSettingsMapper
+                .mapToEntity(settings, OffsetDateTime::from);
         ExtruderRawTelemetryReport<OffsetDateTime> report = extruderTelemetryDomainService
                 .aggregateReportForSingleDevice(uuid, aggregationSettings);
         return extruderRawTelemetryExcelService.convertToExcel(report);
