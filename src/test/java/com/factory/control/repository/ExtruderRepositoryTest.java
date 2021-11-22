@@ -1,10 +1,9 @@
-package com.factory.control.dao_tests;
+package com.factory.control.repository;
 
 import com.factory.control.configuration.OnlyDataJpaTest;
 import com.factory.control.domain.entities.DeviceType;
 import com.factory.control.domain.entities.Extruder;
-import com.factory.control.repository.ExtruderRepository;
-import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -14,9 +13,12 @@ import java.math.BigDecimal;
 import java.util.Optional;
 import java.util.UUID;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertTrue;
+
 @OnlyDataJpaTest
-@DisplayName("ExtruderRepository DAO test")
-class ExtruderRepositoryDAOTest {
+@DisplayName("ExtruderRepository JPA only test")
+class ExtruderRepositoryTest {
 
     @Autowired
     private TestEntityManager testEntityManager;
@@ -24,8 +26,14 @@ class ExtruderRepositoryDAOTest {
     @Autowired
     private ExtruderRepository repository;
 
+    @AfterEach
+    void clean() {
+        repository.deleteAll();
+    }
+
     @Test
-    void test_saveExtruder() {
+    void testSaveExtruder() {
+        // given
         Extruder extruder = new Extruder();
         extruder.setName("Extruder 1 full described");
         extruder.setDeviceType(DeviceType.EXTRUDER);
@@ -35,7 +43,9 @@ class ExtruderRepositoryDAOTest {
 
         //when
         Optional<Extruder> actual = repository.findById(extruder.getId());
-        Assertions.assertTrue(actual.isPresent());
-        Assertions.assertEquals(extruder, actual.get());
+
+        // then
+        assertTrue(actual.isPresent());
+        assertEquals(extruder, actual.get());
     }
 }
