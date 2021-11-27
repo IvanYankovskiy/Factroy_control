@@ -12,6 +12,7 @@ import org.springframework.stereotype.Service;
 import java.time.OffsetDateTime;
 import java.util.Collections;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -19,6 +20,20 @@ public class ExtruderTelemetryDomainService {
     private final TimePeriodBasedAggregator<OffsetDateTime, ExtruderTelemetry, ExtruderTelemetry> extruderTelemetryAggregator;
     private final DeviceCrudServiceAbstract<Extruder, Integer> extruderDeviceService;
     private final ExtruderTelemetryRepository extruderTelemetryRepository;
+
+    public List<ExtruderRawTelemetryReport<OffsetDateTime>> aggregate(
+            List<Integer> ids,
+            List<String> names,
+            List<String> uuids,
+            AggregationSettings<OffsetDateTime> timeSettings
+    ) {
+        return extruderDeviceService.findByCriteria(ids, names, uuids).stream()
+                .map(extruder -> {
+                    List<ExtruderTelemetry> aggregatedTelemetry = this.aggregateForSingleDevice(timeSettings, extruder);
+                    return new ExtruderRawTelemetryReport<>(extruder, timeSettings, aggregatedTelemetry);
+                })
+                .collect(Collectors.toList());
+    }
 
     public ExtruderRawTelemetryReport<OffsetDateTime> aggregateReportForSingleDevice(
             String uuid,

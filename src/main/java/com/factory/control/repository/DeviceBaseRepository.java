@@ -16,7 +16,7 @@ public interface DeviceBaseRepository<E extends Device, ID extends Serializable>
 
     @Query("select distinct(d) from Device d where d.id in :ids or d.name in :names or d.uuid in :uuids")
     List<E> findByCriteria(
-            @Param("ids") List<Integer> ids,
+            @Param("ids") List<ID> ids,
             @Param("names") List<String> names,
             @Param("uuids") List<String> uuids
     );

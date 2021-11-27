@@ -29,6 +29,10 @@ public abstract class DeviceCrudServiceAbstract<E extends Device, ID extends Ser
         return Optional.of(getRepository().findByUuid(uuid)).orElseThrow(() -> new DeviceIsNotFoundException(uuid));
     }
 
+    public List<E> findByCriteria(List<ID> ids, List<String> names, List<String> uuids) {
+        return this.repository.findByCriteria(ids, names, uuids);
+    }
+
     public E create(E newDevice) {
         beforeCreate(newDevice);
         return getRepository().save(newDevice);

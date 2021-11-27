@@ -12,13 +12,14 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
-import java.io.IOException;
 import java.time.Duration;
 import java.time.LocalDate;
 import java.time.OffsetDateTime;
 import java.time.Period;
+import java.util.List;
 
 import static java.time.Duration.ofDays;
 import static java.time.LocalDate.now;
@@ -66,12 +67,24 @@ public class ExtruderRawTelemetryReportController {
         return extruderTelemetryFacade.aggregateForSingleDevice(uuid, settings);
     }
 
-    @GetMapping("extruder/{uuid}/report/raw/excel")
-    public ResponseEntity<byte[]> getWithAggregationAsExcel(
-            @PathVariable String uuid,
+    @GetMapping("extruder/report/raw")
+    public List<ExtruderRawTelemetryAggregatedReportDTO<OffsetDateTime>> getWithAggregation(
+            @RequestParam(required = false) List<Integer> ids,
+            @RequestParam(required = false) List<String> names,
+            @RequestParam(required = false) List<String> uuids,
             AggregationSettingsDTO settings
-    ) throws IOException {
-        InMemoryFileContainer report = extruderTelemetryFacade.aggregateForSingleDeviceAsExcel(uuid, settings);
+    ) {
+        return extruderTelemetryFacade.aggregate(ids, names, uuids, settings);
+    }
+
+    @GetMapping("extruder/report/raw/excel")
+    public ResponseEntity<byte[]> getWithAggregationAsExcel(
+            @RequestParam(required = false) List<Integer> ids,
+            @RequestParam(required = false) List<String> names,
+            @RequestParam(required = false) List<String> uuids,
+            AggregationSettingsDTO settings
+    ) {
+        InMemoryFileContainer report = extruderTelemetryFacade.aggregateAsExcel(ids, names, uuids, settings);
         HttpHeaders headers = getHttpHeadersForExcelReport(report);
         return new ResponseEntity<>(report.getContent(), headers, HttpStatus.OK);
     }
