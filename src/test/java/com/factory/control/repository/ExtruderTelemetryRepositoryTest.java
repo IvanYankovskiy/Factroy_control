@@ -11,7 +11,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.orm.jpa.TestEntityManager;
 import org.testcontainers.shaded.com.google.common.collect.Lists;
 
-import java.math.BigDecimal;
 import java.time.OffsetDateTime;
 import java.util.List;
 import java.util.Optional;
@@ -44,22 +43,16 @@ class ExtruderTelemetryRepositoryTest {
         repository.save(new ExtruderTelemetry()
                 .setDevice(device)
                 .setCounter(80)
-                .setDensity(BigDecimal.valueOf(1.0))
-                .setDiameter(BigDecimal.valueOf(1.75))
                 .setTime(now.minusMinutes(125))
         );
         ExtruderTelemetry entity2 = repository.save(new ExtruderTelemetry()
                 .setDevice(device)
                 .setCounter(45)
-                .setDensity(BigDecimal.valueOf(1.0))
-                .setDiameter(BigDecimal.valueOf(1.75))
                 .setTime(now.minusMinutes(90))
         );
         ExtruderTelemetry entity3 = repository.save(new ExtruderTelemetry()
                 .setDevice(device)
                 .setCounter(45)
-                .setDensity(BigDecimal.valueOf(1.0))
-                .setDiameter(BigDecimal.valueOf(1.75))
                 .setTime(now.minusMinutes(38))
         );
         repository.flush();

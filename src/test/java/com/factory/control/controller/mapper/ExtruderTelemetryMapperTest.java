@@ -2,11 +2,11 @@ package com.factory.control.controller.mapper;
 
 import com.factory.control.controller.dto.ExtruderTelemetryDTO;
 import com.factory.control.domain.entities.ExtruderTelemetry;
-import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.mapstruct.factory.Mappers;
 
-import java.math.BigDecimal;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
 
 class ExtruderTelemetryMapperTest {
 
@@ -21,10 +21,8 @@ class ExtruderTelemetryMapperTest {
 
         ExtruderTelemetry entity = extruderTelemetryMapper.fromDtoToEntity(dto);
 
-        Assertions.assertNotNull(entity);
-        Assertions.assertEquals(dto.getCounter(), entity.getCounter());
-        Assertions.assertEquals(BigDecimal.valueOf(dto.getDensity()), entity.getDensity());
-        Assertions.assertEquals(BigDecimal.valueOf(dto.getDiameter()), entity.getDiameter());
+        assertNotNull(entity);
+        assertEquals(dto.getCounter(), entity.getCounter());
     }
 
 }

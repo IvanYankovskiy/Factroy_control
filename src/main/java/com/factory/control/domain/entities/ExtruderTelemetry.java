@@ -6,9 +6,7 @@ import lombok.Setter;
 import lombok.experimental.Accessors;
 
 import javax.persistence.*;
-import java.math.BigDecimal;
 import java.time.OffsetDateTime;
-import java.util.Objects;
 
 @Entity
 @Getter
@@ -31,33 +29,8 @@ public class ExtruderTelemetry implements Temp<OffsetDateTime> {
     @Column(name = "counter", nullable = false)
     private Integer counter;
 
-    @Column(name = "density", nullable = false)
-    private BigDecimal density;
-
-    @Column(name = "diameter", nullable = false)
-    private BigDecimal diameter;
-
     @Column(name = "time", nullable = false)
     private OffsetDateTime time;
-
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
-        ExtruderTelemetry that = (ExtruderTelemetry) o;
-        return Objects.equals(id, that.id) &&
-                Objects.equals(device, that.device) &&
-                Objects.equals(counter, that.counter) &&
-                Objects.equals(density, that.density) &&
-                Objects.equals(diameter, that.diameter) &&
-                Objects.equals(time, that.time);
-    }
-
-    @Override
-    public int hashCode() {
-        return Objects.hash(id, device, counter, density, diameter, time);
-    }
-
 
     @Override
     public OffsetDateTime getTime() {

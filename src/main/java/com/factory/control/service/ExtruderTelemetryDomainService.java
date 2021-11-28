@@ -44,11 +44,6 @@ public class ExtruderTelemetryDomainService {
         return new ExtruderRawTelemetryReport<>(extruder, timeSettings, telemetry);
     }
 
-    public List<ExtruderTelemetry> aggregateForSingleDevice(String uuid, AggregationSettings<OffsetDateTime> timeSettings) {
-        Extruder extruder = extruderDeviceService.selectByUuid(uuid);
-        return aggregateForSingleDevice(timeSettings, extruder);
-    }
-
     private List<ExtruderTelemetry> aggregateForSingleDevice(AggregationSettings<OffsetDateTime> timeSettings, Extruder extruder) {
         List<ExtruderTelemetry> savedTelemetry = extruderTelemetryRepository
                 .findTelemetriesInPeriod(extruder.getId(), timeSettings.getFrom(), timeSettings.getTo())
