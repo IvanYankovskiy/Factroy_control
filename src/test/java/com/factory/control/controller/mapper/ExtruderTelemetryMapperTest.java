@@ -16,8 +16,6 @@ class ExtruderTelemetryMapperTest {
     void test_fromDtoToEntity() {
         ExtruderTelemetryDTO dto = new ExtruderTelemetryDTO();
         dto.setCounter(0);
-        dto.setDensity(1.25);
-        dto.setDiameter(2.25);
 
         ExtruderTelemetry entity = extruderTelemetryMapper.fromDtoToEntity(dto);
 
