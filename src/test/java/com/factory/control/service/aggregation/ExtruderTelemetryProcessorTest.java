@@ -143,4 +143,37 @@ class ExtruderTelemetryProcessorTest {
                         .setCounter(0)
         );
     }
+
+    @Test
+    void testReduceListWithAllZeroes() {
+        // when
+        List<ExtruderTelemetry> actual = createExtruderTelemetryListWithAllZeroes();
+
+        // then
+        assertThat(actual).hasSize(2);
+        assertThat(actual)
+                .usingRecursiveComparison()
+                .ignoringFields("id", "device")
+                .isEqualTo(
+                        List.of(
+                                new ExtruderTelemetry()
+                                        .setCounter(0)
+                                        .setTime(OffsetDateTime.parse("2020-10-21T23:00:17.245+00:00")),
+                                new ExtruderTelemetry()
+                                        .setCounter(0)
+                                        .setTime(OffsetDateTime.parse("2020-10-21T23:02:07.245+00:00"))
+                        )
+                );
+    }
+
+    private List<ExtruderTelemetry> createExtruderTelemetryListWithAllZeroes() {
+        return Arrays.asList(
+                new ExtruderTelemetry()
+                        .setTime(OffsetDateTime.parse("2020-10-21T23:00:17.245+00:00"))
+                        .setCounter(0),
+                new ExtruderTelemetry()
+                        .setTime(OffsetDateTime.parse("2020-10-21T23:02:07.245+00:00"))
+                        .setCounter(0)
+        );
+    }
 }
