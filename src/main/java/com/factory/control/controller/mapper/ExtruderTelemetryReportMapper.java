@@ -2,7 +2,7 @@ package com.factory.control.controller.mapper;
 
 import com.factory.control.controller.dto.ExtruderRawTelemetryAggregatedReportDTO;
 import com.factory.control.controller.dto.ExtruderRawTelemetryRecordDTO;
-import com.factory.control.domain.bo.ExtruderRawTelemetryReport;
+import com.factory.control.domain.bo.ExtruderTelemetryReport;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 
@@ -11,10 +11,10 @@ import java.util.stream.Collectors;
 
 @Component
 @RequiredArgsConstructor
-public class ExtruderRawTelemetryReportMapper {
+public class ExtruderTelemetryReportMapper {
     private final ExtruderMapper extruderMapper;
 
-    public <T extends Temporal> ExtruderRawTelemetryAggregatedReportDTO<T> mapToDto(ExtruderRawTelemetryReport<T> entity) {
+    public <T extends Temporal> ExtruderRawTelemetryAggregatedReportDTO<T> mapToDto(ExtruderTelemetryReport<T> entity) {
         return new ExtruderRawTelemetryAggregatedReportDTO<>(
                 extruderMapper.fromEntityToDto(entity.getExtruder()),
                 entity.getAggregationSettings(),

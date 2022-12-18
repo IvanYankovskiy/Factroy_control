@@ -1,9 +1,9 @@
 package com.factory.control.service.report;
 
-import com.factory.control.domain.bo.ExtruderRawTelemetryReport;
+import com.factory.control.domain.bo.ExtruderTelemetryReport;
 import com.factory.control.domain.bo.InMemoryFileContainer;
 import com.factory.control.domain.entities.Extruder;
-import com.factory.control.domain.entities.ExtruderTelemetry;
+import com.factory.control.domain.entities.ExtruderTelemetryDto;
 import com.factory.control.service.aggregation.AggregationSettings;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.RequiredArgsConstructor;
@@ -29,15 +29,7 @@ import java.util.Map;
 public class ExtruderRawTelemetryExcelService {
     private final ObjectMapper objectMapper;
 
-    public InMemoryFileContainer convertToExcel(ExtruderRawTelemetryReport<OffsetDateTime> rawTelemetryReport) throws IOException {
-        return new InMemoryFileContainer(
-                rawTelemetryReport.getExtruder().getName(),
-                "xlsx",
-                convertToExcelBytes(rawTelemetryReport)
-        );
-    }
-
-    public InMemoryFileContainer convertToExcel(List<ExtruderRawTelemetryReport<OffsetDateTime>> rawTelemetryReports) {
+    public InMemoryFileContainer convertToExcel(List<ExtruderTelemetryReport<OffsetDateTime>> rawTelemetryReports) {
         return new InMemoryFileContainer(
                 "Extruders-" + LocalDate.now(),
                 "xlsx",
@@ -45,7 +37,7 @@ public class ExtruderRawTelemetryExcelService {
         );
     }
 
-    public byte[] convertToExcelBytes(List<ExtruderRawTelemetryReport<OffsetDateTime>> rawTelemetryReports) {
+    public byte[] convertToExcelBytes(List<ExtruderTelemetryReport<OffsetDateTime>> rawTelemetryReports) {
         try(ByteArrayOutputStream bos = new ByteArrayOutputStream();
             Workbook workbook = new XSSFWorkbook()) {
             rawTelemetryReports.sort(Comparator.comparing(rawTelemetryReport -> rawTelemetryReport.getExtruder().getName()));
@@ -61,19 +53,10 @@ public class ExtruderRawTelemetryExcelService {
         }
     }
 
-    private void createSheet(Sheet sheet, ExtruderRawTelemetryReport<OffsetDateTime> rawTelemetryReport) {
+    private void createSheet(Sheet sheet, ExtruderTelemetryReport<OffsetDateTime> rawTelemetryReport) {
         int rowAfterDescription = addExtruderDescription(rawTelemetryReport.getExtruder(), sheet);
         int rowAfterSettings = addAggregationSettings(sheet, rowAfterDescription, rawTelemetryReport.getAggregationSettings());
         addTelemetryRows(rowAfterSettings, sheet, rawTelemetryReport);
-    }
-
-    private byte[] convertToExcelBytes(ExtruderRawTelemetryReport<OffsetDateTime> rawTelemetryReport) throws IOException {
-        Workbook workbook = new XSSFWorkbook();
-        Sheet sheet = workbook.createSheet();
-        int rowAfterDescription = addExtruderDescription(rawTelemetryReport.getExtruder(), sheet);
-        int rowAfterSettings = addAggregationSettings(sheet, rowAfterDescription, rawTelemetryReport.getAggregationSettings());
-        addTelemetryRows(rowAfterSettings, sheet, rawTelemetryReport);
-        return convertWorkbookToByteArray(workbook);
     }
 
     private int addAggregationSettings(Sheet sheet, int rowAfterDescription, AggregationSettings<OffsetDateTime> aggregationSettings) {
@@ -100,7 +83,7 @@ public class ExtruderRawTelemetryExcelService {
         return rowAfterDescription;
     }
 
-    private int addTelemetryRows(int startRowIndex, Sheet sheet, ExtruderRawTelemetryReport<OffsetDateTime> rawTelemetryReport) {
+    private int addTelemetryRows(int startRowIndex, Sheet sheet, ExtruderTelemetryReport<OffsetDateTime> rawTelemetryReport) {
         int currentRowIndex = startRowIndex;
         Row headerRow = sheet.createRow(currentRowIndex);
         createTelemetryHeadersRow(headerRow);
@@ -109,7 +92,7 @@ public class ExtruderRawTelemetryExcelService {
         long counterSum = 0;
         BigDecimal lengthSum = BigDecimal.ZERO;
         BigDecimal toMeters = BigDecimal.valueOf(1000.0);
-        for (ExtruderTelemetry item : rawTelemetryReport.getTelemetry()) {
+        for (ExtruderTelemetryDto item : rawTelemetryReport.getTelemetry()) {
             Row row = sheet.createRow(currentRowIndex);
             row.createCell(0).setCellValue(item.getTime().toString());
             row.createCell(1).setCellValue(item.getCounter());

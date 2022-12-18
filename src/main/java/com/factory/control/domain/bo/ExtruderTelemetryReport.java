@@ -1,7 +1,7 @@
 package com.factory.control.domain.bo;
 
 import com.factory.control.domain.entities.Extruder;
-import com.factory.control.domain.entities.ExtruderTelemetry;
+import com.factory.control.domain.entities.ExtruderTelemetryDto;
 import com.factory.control.service.aggregation.AggregationSettings;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -13,8 +13,8 @@ import java.util.List;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-public class ExtruderRawTelemetryReport<T extends Temporal> {
+public class ExtruderTelemetryReport<T extends Temporal> {
     Extruder extruder;
     AggregationSettings<T> aggregationSettings;
-    List<ExtruderTelemetry> telemetry;
+    List<ExtruderTelemetryDto> telemetry;
 }

@@ -1,6 +1,5 @@
 package com.factory.control.domain.entities;
 
-import com.factory.control.domain.bo.Temp;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.experimental.Accessors;
@@ -13,7 +12,7 @@ import java.time.OffsetDateTime;
 @Setter
 @Accessors(chain = true)
 @Table(name = "extruder_telemetry")
-public class ExtruderTelemetry implements Temp<OffsetDateTime> {
+public class ExtruderTelemetry {
 
     @Id
     @Column(name = "id", nullable = false)
@@ -32,8 +31,4 @@ public class ExtruderTelemetry implements Temp<OffsetDateTime> {
     @Column(name = "time", nullable = false)
     private OffsetDateTime time;
 
-    @Override
-    public OffsetDateTime getTime() {
-        return time;
-    }
 }

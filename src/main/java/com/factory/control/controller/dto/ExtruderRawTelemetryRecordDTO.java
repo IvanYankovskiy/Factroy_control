@@ -1,6 +1,7 @@
 package com.factory.control.controller.dto;
 
 import com.factory.control.domain.entities.ExtruderTelemetry;
+import com.factory.control.domain.entities.ExtruderTelemetryDto;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import lombok.Value;
 
@@ -15,6 +16,11 @@ public class ExtruderRawTelemetryRecordDTO {
     OffsetDateTime time;
 
     public ExtruderRawTelemetryRecordDTO(ExtruderTelemetry telemetry) {
+        this.counter = telemetry.getCounter();
+        this.time = telemetry.getTime();
+    }
+
+    public ExtruderRawTelemetryRecordDTO(ExtruderTelemetryDto telemetry) {
         this.counter = telemetry.getCounter();
         this.time = telemetry.getTime();
     }

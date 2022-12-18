@@ -3,8 +3,8 @@ package com.factory.control.facade;
 import com.factory.control.controller.dto.AggregationSettingsDTO;
 import com.factory.control.controller.dto.ExtruderRawTelemetryAggregatedReportDTO;
 import com.factory.control.controller.mapper.AggregationSettingsMapper;
-import com.factory.control.controller.mapper.ExtruderRawTelemetryReportMapper;
-import com.factory.control.domain.bo.ExtruderRawTelemetryReport;
+import com.factory.control.controller.mapper.ExtruderTelemetryReportMapper;
+import com.factory.control.domain.bo.ExtruderTelemetryReport;
 import com.factory.control.domain.bo.InMemoryFileContainer;
 import com.factory.control.service.ExtruderTelemetryDomainService;
 import com.factory.control.service.aggregation.AggregationSettings;
@@ -12,7 +12,6 @@ import com.factory.control.service.report.ExtruderRawTelemetryExcelService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
-import java.io.IOException;
 import java.time.OffsetDateTime;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -21,7 +20,7 @@ import java.util.stream.Collectors;
 @RequiredArgsConstructor
 public class ExtruderTelemetryFacade {
     private final ExtruderTelemetryDomainService extruderTelemetryDomainService;
-    private final ExtruderRawTelemetryReportMapper extruderRawTelemetryReportMapper;
+    private final ExtruderTelemetryReportMapper extruderTelemetryReportMapper;
     private final ExtruderRawTelemetryExcelService extruderRawTelemetryExcelService;
     private final AggregationSettingsMapper aggregationSettingsMapper;
 
@@ -31,9 +30,9 @@ public class ExtruderTelemetryFacade {
     ) {
         AggregationSettings<OffsetDateTime> aggregationSettings = aggregationSettingsMapper
                 .mapToEntity(settings, OffsetDateTime::from);
-        ExtruderRawTelemetryReport<OffsetDateTime> report = extruderTelemetryDomainService
+        ExtruderTelemetryReport<OffsetDateTime> report = extruderTelemetryDomainService
                 .aggregateReportForSingleDevice(uuid, aggregationSettings);
-        return extruderRawTelemetryReportMapper.mapToDto(report);
+        return extruderTelemetryReportMapper.mapToDto(report);
     }
 
     public List<ExtruderRawTelemetryAggregatedReportDTO<OffsetDateTime>> aggregate(
@@ -44,10 +43,10 @@ public class ExtruderTelemetryFacade {
     ) {
         AggregationSettings<OffsetDateTime> aggregationSettings = aggregationSettingsMapper
                 .mapToEntity(settings, OffsetDateTime::from);
-        List<ExtruderRawTelemetryReport<OffsetDateTime>> reports = extruderTelemetryDomainService
-                .aggregate(ids, names, uuids, aggregationSettings);
+        List<ExtruderTelemetryReport<OffsetDateTime>> reports = extruderTelemetryDomainService
+                .aggregate2(ids, names, uuids, aggregationSettings);
         return reports.stream()
-                .map(extruderRawTelemetryReportMapper::mapToDto)
+                .map(extruderTelemetryReportMapper::mapToDto)
                 .collect(Collectors.toList());
     }
 
@@ -59,19 +58,8 @@ public class ExtruderTelemetryFacade {
     ) {
         AggregationSettings<OffsetDateTime> aggregationSettings = aggregationSettingsMapper
                 .mapToEntity(settings, OffsetDateTime::from);
-        List<ExtruderRawTelemetryReport<OffsetDateTime>> reports = extruderTelemetryDomainService
-                .aggregate(ids, names, uuids, aggregationSettings);
+        List<ExtruderTelemetryReport<OffsetDateTime>> reports = extruderTelemetryDomainService
+                .aggregate2(ids, names, uuids, aggregationSettings);
         return extruderRawTelemetryExcelService.convertToExcel(reports);
-    }
-
-    public InMemoryFileContainer aggregateForSingleDeviceAsExcel(
-            String uuid,
-            AggregationSettingsDTO settings
-    ) throws IOException {
-        AggregationSettings<OffsetDateTime> aggregationSettings = aggregationSettingsMapper
-                .mapToEntity(settings, OffsetDateTime::from);
-        ExtruderRawTelemetryReport<OffsetDateTime> report = extruderTelemetryDomainService
-                .aggregateReportForSingleDevice(uuid, aggregationSettings);
-        return extruderRawTelemetryExcelService.convertToExcel(report);
     }
 }
