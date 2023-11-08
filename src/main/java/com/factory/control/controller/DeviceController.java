@@ -1,16 +1,20 @@
 package com.factory.control.controller;
 
 import com.factory.control.controller.dto.DeviceDTO;
+import com.factory.control.domain.entities.DeviceType;
 import com.factory.control.service.DeviceManagementService;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
 
+@Slf4j
 @RestController
 public class DeviceController<T extends DeviceDTO> {
 
@@ -20,6 +24,13 @@ public class DeviceController<T extends DeviceDTO> {
     public DeviceController(List<DeviceManagementService> deviceService) {
         servicesMap = deviceService.stream()
                 .collect(Collectors.toMap(DeviceManagementService::getDeviceType, deviceManagementService -> deviceManagementService));
+    }
+
+    @GetMapping("/dictionary/device/types")
+    public List<String> getDeviceTypes() {
+        return Arrays.stream(DeviceType.values())
+                .map(DeviceType::name)
+                .collect(Collectors.toList());
     }
 
     @GetMapping("/device")
@@ -51,7 +62,7 @@ public class DeviceController<T extends DeviceDTO> {
         return deviceManagementService.createDevice(deviceDto);
     }
 
-    @PostMapping("/device/{type}/{uuid}")
+    @PutMapping("/device/{type}/{uuid}")
     public T updateDevice(@PathVariable("type") String type,
                                   @PathVariable("uuid") String uuid, @Valid @RequestBody T deviceDto) {
         DeviceManagementService<T> deviceManagementService = getDeviceManagementService(type);
