@@ -21,7 +21,7 @@ public class DeviceController<T extends DeviceDTO> {
     private Map<String, DeviceManagementService<T>> servicesMap;
 
     @Autowired
-    public DeviceController(List<DeviceManagementService> deviceService) {
+    public DeviceController(List<DeviceManagementService<T>> deviceService) {
         servicesMap = deviceService.stream()
                 .collect(Collectors.toMap(DeviceManagementService::getDeviceType, deviceManagementService -> deviceManagementService));
     }
