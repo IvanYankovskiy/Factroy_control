@@ -3,8 +3,8 @@ package com.factory.control.controller.dto;
 import com.fasterxml.jackson.annotation.JsonTypeName;
 import lombok.*;
 
-import javax.validation.constraints.NotNull;
-import javax.validation.constraints.Positive;
+import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.Positive;
 import java.math.BigDecimal;
 
 @JsonTypeName("EXTRUDER")
