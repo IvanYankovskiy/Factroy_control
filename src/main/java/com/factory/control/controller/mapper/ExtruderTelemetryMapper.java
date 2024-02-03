@@ -7,7 +7,7 @@ import org.mapstruct.Mapping;
 import org.mapstruct.Mappings;
 import org.mapstruct.NullValueCheckStrategy;
 
-import javax.validation.Validator;
+import jakarta.validation.Validator;
 
 @Mapper(componentModel = "spring", uses = Validator.class)
 public abstract class ExtruderTelemetryMapper {

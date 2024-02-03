@@ -7,7 +7,7 @@ import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 import org.mapstruct.ReportingPolicy;
 
-import javax.validation.Validator;
+import jakarta.validation.Validator;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;

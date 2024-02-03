@@ -1,13 +1,11 @@
 package com.factory.control.domain.entities;
 
-import com.vladmihalcea.hibernate.type.basic.PostgreSQLEnumType;
+import io.hypersistence.utils.hibernate.type.basic.PostgreSQLEnumType;
+import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.experimental.Accessors;
 import org.hibernate.annotations.Type;
-import org.hibernate.annotations.TypeDef;
-
-import javax.persistence.*;
 
 @Entity
 @Getter
@@ -17,8 +15,6 @@ import javax.persistence.*;
 @Inheritance(
         strategy = InheritanceType.JOINED
 )
-@TypeDef(name = "pgsql_enum",
-         typeClass = PostgreSQLEnumType.class)
 public class Device {
 
     @Id
@@ -35,7 +31,7 @@ public class Device {
 
     @Enumerated(EnumType.STRING)
     @Column(name = "device_type", nullable = false)
-    @Type( type = "pgsql_enum")
+    @Type( value = PostgreSQLEnumType.class)
     private DeviceType deviceType;
 
     @Column(name = "description", length = 100)
