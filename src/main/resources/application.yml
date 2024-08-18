@@ -1,0 +1,36 @@
+server:
+  error:
+    include-stacktrace: never
+    include-message: always
+
+logging:
+  level:
+    root: DEBUG
+    org.apache.tomcat.util.net.NioEndpoint: ERROR
+    sun.rmi: ERROR
+    java.io: ERROR
+    javax.management: ERROR
+
+spring:
+  profiles:
+    active: dockerdb
+  datasource:
+    driver-class-name: org.postgresql.Driver
+  liquibase:
+    change-log: classpath:/db/changelog/changelogEntrypoint.xml
+  jpa:
+    open-in-view: false
+    properties:
+      hibernate:
+        ddl-auto: none
+        dialect: org.hibernate.dialect.PostgreSQLDialect
+        jdbc:
+          time_zone: UTC
+
+
+  jackson:
+    serialization:
+      write-dates-as-timestamps: false
+
+app:
+  page-size: ${FACTORY_PAGE_SIZE:172800}

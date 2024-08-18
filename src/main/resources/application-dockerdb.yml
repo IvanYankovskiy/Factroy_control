@@ -1,0 +1,5 @@
+spring:
+  datasource:
+    url: ${FACTORY_DATABASE_URL}
+    username: ${FACTORY_DATABASE_USERNAME}
+    password: ${FACTORY_DATABASE_PASSWORD}
