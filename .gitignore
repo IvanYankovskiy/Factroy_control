@@ -3,7 +3,12 @@ target/
 !.mvn/wrapper/maven-wrapper.jar
 !**/src/main/**
 !**/src/test/**
+/docker-compose-local.yml
+/.app-local.env
+/.db-local.env
 src/main/resources/application-local.properties
+/src/main/resources/application-dockerdb-local.properties
+/src/main/resources/application-dockerdb-local.yml
 
 ### STS ###
 .apt_generated
@@ -31,7 +36,4 @@ build/
 ### VS Code ###
 .vscode/
 /.mvn/
-/docker-compose-local.yml
-/.app-local.env
-/.db-local.env
-/src/main/resources/application-dockerdb-local.properties
+
