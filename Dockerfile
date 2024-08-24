@@ -1,4 +1,4 @@
-FROM adoptopenjdk/openjdk11
+FROM amazoncorretto:21.0.4-alpine3.18
 EXPOSE 8080
 
 WORKDIR root/
